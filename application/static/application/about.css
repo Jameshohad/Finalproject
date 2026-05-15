@@ -1,0 +1,128 @@
+/* 关于页面额外样式 */
+.mission-section,
+.features-section,
+.team-section,
+.project-section,
+.contact-section,
+.cta-section {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  border-left: 4px solid #e53935;
+}
+
+.mission-section h3,
+.features-section h3,
+.team-section h3,
+.project-section h3,
+.contact-section h3 {
+  color: #ffd700;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+.features-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features-section li {
+  margin: 12px 0;
+  padding-left: 25px;
+  position: relative;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.features-section li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.features-section li strong {
+  color: #ffd700;
+}
+
+.cta-section {
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    rgba(229, 57, 53, 0.2),
+    rgba(198, 40, 40, 0.2)
+  );
+  padding: 30px;
+  margin-top: 40px;
+}
+
+.cta-section p {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.cta-button {
+  padding: 15px 40px;
+  background: linear-gradient(135deg, #e53935 0%, #ff6b6b 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(229, 57, 53, 0.4);
+}
+
+.cta-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(229, 57, 53, 0.6);
+  background: linear-gradient(135deg, #c62828 0%, #ff5252 100%);
+}
+
+/* 页脚样式 */
+footer {
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+  padding: 30px 0;
+  margin-top: 50px;
+  width: 100%;
+}
+
+.footer-content {
+  text-align: center; /* 确保内容居中 */
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-content p {
+  margin: 8px 0;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .about {
+    padding: 20px;
+  }
+
+  .mission-section,
+  .features-section,
+  .team-section,
+  .project-section,
+  .contact-section,
+  .cta-section {
+    padding: 15px;
+    margin: 15px 0;
+  }
+
+  .cta-button {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}

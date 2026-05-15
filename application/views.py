@@ -28,6 +28,27 @@ from .serializers import (
     LearningActivitySerializer
 )
 
+from django.shortcuts import render
+
+ #前端页面添加
+
+def about_page(request):
+    return render(request, "application/about.html")
+
+def course_page(request):
+    return render(request, "application/course.html")
+
+def index(request):
+    return render(request, "application/index.html")
+
+def login(request):
+    return render(request, "application/login.html")
+
+def quiz_page(request):
+    return render(request, "application/quiz.html")
+
+def signup(request):
+    return render(request, "application/signup.html")
 
 class LearningGoalViewSet(viewsets.ModelViewSet):
     queryset = LearningGoal.objects.all()

@@ -1,0 +1,109 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>课程 - Learn Chinese</title>
+    <link rel="stylesheet" href="{% static 'application/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/pages.css' %}" />
+    <script src="{% static 'application/language.js' %}" defer></script>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="/">
+        <img
+          class="logo-img"
+          src="{% static 'application/images/logo.png' %}"
+          alt="Learn Chinese Logo"
+        />
+      </a>
+
+      <!-- 菜单 -->
+      <div class="menu">
+        <a href="{% url 'index' %}" data-translate="nav.home">主页</a>
+        <a href="{% url 'course' %}" data-translate="nav.courses">课程</a>
+        <a href="{% url 'quiz' %}" data-translate="nav.quiz">测验</a>
+        <a href="{% url 'about' %}" data-translate="nav.about">关于</a>
+        <a href="{% url 'signup' %}" data-translate="nav.signup">注册</a>
+
+        <!-- 添加翻译按钮 -->
+        <button type="button" id="translate-btn" class="translate-btn">
+          <span class="translate-icon">🌐</span>
+          <span class="lang-text">English</span>
+        </button>
+      </div>
+    </nav>
+
+    <main>
+      <div class="course">
+        <div class="title" data-translate="courses.title">
+          开始您的个性化中文学习之旅
+        </div>
+
+        <div class="grid">
+          <div class="course-card pink">
+            <h3 data-translate="course1.title">HSK 1 初级课程</h3>
+            <ul>
+              <li data-translate="course1.item1">📚 150个基础词汇</li>
+              <li data-translate="course1.item2">📝 基本语法结构</li>
+              <li data-translate="course1.item3">🗣️ 日常对话练习</li>
+              <li data-translate="course1.item4">🎧 标准发音训练</li>
+              <li data-translate="course1.item5">📊 进度跟踪系统</li>
+            </ul>
+            <!-- 第一个按钮 -->
+            <button
+              data-link="https://www.bilibili.com/video/BV12Y411p7cT/?spm_id_from=333.337.search-card.all.click&vd_source=c809e863f6d3e6bd0e71b7e1bdd8e85c"
+              data-translate="course1.button"
+            >
+              开始学习
+            </button>
+          </div>
+
+          <div class="course-card green">
+            <h3 data-translate="course2.title">日常会话课程</h3>
+            <ul>
+              <li data-translate="course2.item1">👋 问候与介绍</li>
+              <li data-translate="course2.item2">🍽️ 餐厅点餐用语</li>
+              <li data-translate="course2.item3">🛒 购物对话练习</li>
+              <li data-translate="course2.item4">🏨 酒店住宿交流</li>
+              <li data-translate="course2.item5">🚕 交通出行对话</li>
+            </ul>
+            <!-- 第二个按钮 -->
+            <button
+              data-link="https://www.bilibili.com/video/BV1yL4y1p7eG/?spm_id_from=333.337.search-card.all.click&vd_source=c809e863f6d3e6bd0e71b7e1bdd8e85c"
+              data-translate="course2.button"
+            >
+              立即体验
+            </button>
+          </div>
+
+          <div class="course-card red">
+            <h3 data-translate="course3.title">旅游中文课程</h3>
+            <ul>
+              <li data-translate="course3.item1">✈️ 机场常用表达</li>
+              <li data-translate="course3.item2">🏨 酒店入住退房</li>
+              <li data-translate="course3.item3">🗺️ 问路与方向</li>
+              <li data-translate="course3.item4">🍜 美食文化介绍</li>
+              <li data-translate="course3.item5">🚨 紧急情况用语</li>
+            </ul>
+            <!-- 第三个按钮 -->
+            <button
+              data-link="https://www.bilibili.com/video/BV1e4411Q7uv?spm_id_from=333.788.videopod.episodes&vd_source=c809e863f6d3e6bd0e71b7e1bdd8e85c&p=45"
+              data-translate="course3.button"
+            >
+              了解更多
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-content">
+        <p>© 2025 Learn Chinese. 保留所有权利。</p>
+        <p>让世界听见中文的声音！</p>
+      </div>
+    </footer>
+    <script src="{% static 'application/script.js' %}"></script>
+  </body>
+</html>

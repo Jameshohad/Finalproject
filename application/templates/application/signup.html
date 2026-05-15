@@ -1,0 +1,318 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>注册账户 - Learn Chinese</title>
+    <meta
+      name="description"
+      content="创建您的Learn Chinese账户，开始中文学习之旅"
+    />
+    <meta name="keywords" content="注册, 中文学习, 免费账户, 在线学习" />
+    <link rel="stylesheet" href=" {% static 'application/style.css' %}" />
+    <link rel="stylesheet" href=" {% static 'application/pages.css' %}" />
+    <link rel="stylesheet" href=" {% static 'application/signup.css' %}" />
+    <link
+      rel="icon"
+      href="{% static 'application/images/logo.png' %}"
+      type="image/png"
+    />
+    <script src="{% static 'application/language.js' %}" defer></script>
+  </head>
+  <body>
+    <!-- 导航栏 -->
+    <nav class="nav">
+      <a href="/">
+        <img
+          class="logo-img"
+          src="{% static 'application/images/logo.png' %}"
+          alt="Learn Chinese Logo"
+        />
+      </a>
+
+      <!-- 替换每个文件中导航栏的菜单部分 -->
+      <div class="menu">
+        <a href="{% url 'index' %}" data-translate="nav.home">主页</a>
+        <a href="{% url 'course' %}" data-translate="nav.courses">课程</a>
+        <a href="{% url 'quiz' %}" data-translate="nav.quiz">测验</a>
+        <a href="{% url 'about' %}l" data-translate="nav.about">关于</a>
+        <a href="{% url 'signup' %}" data-translate="nav.signup">注册</a>
+        <!-- 添加翻译按钮 -->
+        <button type="button" id="translate-btn" class="translate-btn">
+          <span class="translate-icon">🌐</span>
+          <span class="lang-text">English</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main>
+      <div class="signup">
+        <div class="signup-card">
+          <div class="signup-header">
+            <h2 data-translate="signup.title">创建您的免费账户</h2>
+            <p data-translate="signup.subtitle">
+              加入全球中文学习者社区，开始您的语言学习之旅
+            </p>
+          </div>
+
+          <form id="signupForm">
+            <!-- 用户名 -->
+            <div class="form-group">
+              <label for="username" data-translate="signup.username"
+                >👤 用户名</label
+              >
+              <input
+                type="text"
+                id="username"
+                placeholder="请输入用户名"
+                required
+                minlength="4"
+                maxlength="20"
+                data-translate="signup.inputusername"
+              />
+              <div class="hint" data-translate="signup.username1">
+                英文字母、数字或中文，不能包含特殊字符
+              </div>
+            </div>
+
+            <!-- 邮箱 -->
+            <div class="form-group">
+              <label for="email" data-translate="signup.mail"
+                >📧 邮箱地址</label
+              >
+              <input
+                type="email"
+                id="email"
+                placeholder="请输入有效邮箱地址"
+                required
+                data-translate="signup.inputmail"
+              />
+              <div class="hint" data-translate="signup.mail1">
+                我们将通过此邮箱发送验证邮件
+              </div>
+            </div>
+
+            <!-- 密码 -->
+            <div class="form-group">
+              <label for="password" data-translate="signup.password"
+                >🔒 密码</label
+              >
+              <input
+                type="password"
+                id="password"
+                placeholder="请输入密码 (至少8位)"
+                required
+                minlength="8"
+                data-translate="signup.inputpassword"
+              />
+              <div class="password-strength">
+                <div class="strength-bar"></div>
+                <span
+                  class="strength-text"
+                  data-translate="signup.passwordstrong"
+                  >密码强度: 弱</span
+                >
+              </div>
+            </div>
+
+            <!-- 确认密码 -->
+            <div class="form-group">
+              <label
+                for="confirmPassword"
+                data-translate="signup.confirmPassword"
+                >🔑 确认密码</label
+              >
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="请再次输入密码"
+                required
+                data-translate="signup.passwordagain"
+              />
+              <div class="hint" data-translate="signup.passwordmakesure">
+                请确保两次输入的密码一致
+              </div>
+            </div>
+
+            <!-- 学习目标 -->
+            <div class="form-group">
+              <label data-translate="signup.puropose"
+                >🎯 您的学习目标是什么？</label
+              >
+              <div class="goal-options">
+                <label class="goal-option">
+                  <input type="radio" name="goal" value="beginner" checked />
+                  <span data-translate="signup.puropose1">零基础入门</span>
+                </label>
+                <label class="goal-option">
+                  <input type="radio" name="goal" value="conversation" />
+                  <span data-translate="signup.puropose2">日常会话</span>
+                </label>
+                <label class="goal-option">
+                  <input type="radio" name="goal" value="business" />
+                  <span data-translate="signup.puropose3">商务中文</span>
+                </label>
+                <label class="goal-option">
+                  <input type="radio" name="goal" value="travel" />
+                  <span data-translate="signup.puropose4">旅游交流</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 注册按钮 -->
+            <button
+              type="submit"
+              class="submit-btn"
+              data-translate="signup.creat"
+            >
+              🚀 创建账户
+            </button>
+
+            <!-- 登录链接 -->
+            <div class="login-link">
+              <span data-translate="signup.haveaccount">已有账户？</span>
+              <a href="{% url 'login' %}" data-translate="signup.logininm"
+                >立即登录</a
+              >
+            </div>
+
+            <!-- 社交登录 -->
+            <div class="social-login">
+              <div class="divider">
+                <span data-translate="signup.logindifferent"
+                  >或使用以下方式注册</span
+                >
+              </div>
+              <div class="social-buttons">
+                <button type="button" class="social-btn google-btn">
+                  Google
+                </button>
+                <button
+                  type="button"
+                  class="social-btn wechat-btn"
+                  data-translate="signup.wechat"
+                >
+                  微信
+                </button>
+                <button type="button" class="social-btn github-btn">
+                  GitHub
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- 成功消息（初始隐藏） -->
+          <div
+            id="successMessage"
+            class="success-message"
+            style="display: none"
+          >
+            <div class="success-icon">🎉</div>
+            <h3>注册成功！</h3>
+            <p>欢迎加入 Learn Chinese 社区！</p>
+            <p>我们已经向您的邮箱发送了验证邮件，请查收。</p>
+            <button onclick="window.location.href='{% url index  %}'" class="start-learning-btn">
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+      <div class="footer-content">
+        <p>© 2025 Learn Chinese. 保留所有权利。</p>
+        <p>让世界听见中文的声音！</p>
+      </div>
+    </footer>
+
+    <script src="{% static 'application/script.js' %}"></script>
+
+    <script>
+      // 密码强度检测
+      document
+        .getElementById("password")
+        .addEventListener("input", function (e) {
+          const password = e.target.value;
+          const strengthBar = document.querySelector(".strength-bar");
+          const strengthText = document.querySelector(".strength-text");
+
+          let strength = 0;
+          let color = "#f44336"; // 红色
+          let text = "弱";
+
+          if (password.length >= 8) strength++;
+          if (/[A-Z]/.test(password)) strength++;
+          if (/[0-9]/.test(password)) strength++;
+          if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+          if (strength >= 3) {
+            color = "#4CAF50"; // 绿色
+            text = "强";
+          } else if (strength >= 2) {
+            color = "#FF9800"; // 橙色
+            text = "中";
+          }
+
+          strengthBar.style.width = strength * 25 + "%";
+          strengthBar.style.backgroundColor = color;
+          strengthText.textContent = "密码强度: " + text;
+          strengthText.style.color = color;
+        });
+
+      // 表单提交处理
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // 获取表单数据
+          const username = document.getElementById("username").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+          const terms = document.getElementById("terms").checked;
+
+          // 验证密码一致性
+          if (password !== confirmPassword) {
+            alert("两次输入的密码不一致，请重新输入！");
+            document.getElementById("confirmPassword").focus();
+            return;
+          }
+
+          // 获取学习目标
+          const goal = document.querySelector(
+            'input[name="goal"]:checked',
+          ).value;
+
+          // 显示加载状态
+          const submitBtn = document.querySelector(".submit-btn");
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = "创建账户中...";
+          submitBtn.disabled = true;
+
+          // 模拟API请求延迟
+          setTimeout(() => {
+            // 隐藏表单，显示成功消息
+            document.getElementById("signupForm").style.display = "none";
+            document.getElementById("successMessage").style.display = "block";
+
+            // 控制台输出注册信息（实际项目中会发送到服务器）
+            console.log("用户注册信息:", {
+              username,
+              email,
+              passwordLength: password.length,
+              goal,
+              timestamp: new Date().toISOString(),
+            });
+
+            // 重置按钮状态
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          }, 1500);
+        });
+    </script>
+  </body>
+</html>

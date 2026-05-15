@@ -1,0 +1,166 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登录 - Learn Chinese</title>
+    <link rel="stylesheet" href=" {% static 'application/style.css' %}" />
+    <link rel="stylesheet" href=" {% static 'application/pages.css' %}" />
+    <link rel="stylesheet" href=" {% static 'application/login.css' %}" />
+  </head>
+  <body>
+    <!-- 导航栏 -->
+    <nav class="nav">
+      <a href="/">
+        <img
+          class="logo-img"
+          src="{% static 'application/images/logo.png' %}"
+          alt="Learn Chinese Logo"
+        />
+      </a>
+      <div class="menu">
+        <a href="{% url 'index' %}" data-translate="nav.home">主页</a>
+        <a href="{% url 'course' %}" data-translate="nav.courses">课程</a>
+        <a href="{% url 'quiz' %}" data-translate="nav.quiz">测验</a>
+        <a href="{% url 'about' %}" data-translate="nav.about">关于</a>
+        <a
+          href="{% url 'signup' %}"
+          class="signup-btn"
+          data-translate="nav.signup"
+          >注册</a
+        >
+        <button type="button" id="translate-btn" class="translate-btn">
+          <span class="translate-icon">🌐</span>
+          <span class="lang-text">English</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="main-container">
+      <div class="login-card">
+        <!-- 登录表单 -->
+        <div class="login-form" id="login-form">
+          <div class="login-header">
+            <h2 data-translate="login.title">登录您的账户</h2>
+            <p data-translate="login.subtitle">
+              欢迎回来！请登录您的账户继续学习中文
+            </p>
+          </div>
+
+          <!-- 邮箱输入 -->
+          <div class="form-group">
+            <label data-translate="login.email">📧 邮箱地址</label>
+            <input
+              type="email"
+              id="login-email"
+              placeholder="请输入您的邮箱地址"
+              data-translate="login.emailPlaceholder"
+            />
+            <span class="hint" data-translate="login.emailHint"
+              >请输入注册时使用的邮箱地址</span
+            >
+          </div>
+
+          <!-- 密码输入 -->
+          <div class="form-group">
+            <label data-translate="login.password">🔒 密码</label>
+            <div class="password-input-wrapper">
+              <input
+                type="password"
+                id="login-password"
+                placeholder="请输入您的密码"
+                data-translate="login.passwordPlaceholder"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                id="login-password-toggle"
+              >
+                👁️
+              </button>
+            </div>
+            <span class="hint" data-translate="login.passwordHint"
+              >请输入您的账户密码</span
+            >
+          </div>
+
+          <!-- 记住密码和忘记密码 -->
+          <div class="login-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember-checkbox" />
+              <span data-translate="login.remember">记住我</span>
+            </label>
+            <a href="#" class="forgot-password" data-translate="login.forgot"
+              >忘记密码？</a
+            >
+          </div>
+
+          <!-- 登录按钮 -->
+          <button
+            class="login-btn"
+            id="login-submit"
+            data-translate="login.submit"
+          >
+            🚀 登录
+          </button>
+
+          <!-- 没有账户链接 -->
+          <div class="signup-link">
+            <span data-translate="login.noAccount">还没有账户？</span>
+            <a href="{% url 'signup' %}" data-translate="login.signupNow"
+              >立即注册</a
+            >
+          </div>
+
+          <!-- 社交登录 -->
+          <div class="social-login">
+            <div class="divider">
+              <span data-translate="login.orLogin">或使用以下方式登录</span>
+            </div>
+            <div class="social-buttons">
+              <button class="social-btn google-btn" id="google-login">
+                Google
+              </button>
+              <button class="social-btn wechat-btn" id="wechat-login">
+                微信
+              </button>
+              <button class="social-btn github-btn" id="github-login">
+                GitHub
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 登录成功提示 -->
+        <div class="login-success" id="login-success" style="display: none">
+          <div class="success-icon">✅</div>
+          <h3 data-translate="login.success">登录成功！</h3>
+          <p data-translate="login.successMessage">
+            欢迎回到 Learn Chinese！正在重定向到首页...
+          </p>
+          <div class="redirect-timer">
+            <span data-translate="login.redirect"
+              >将在 <span id="countdown">3</span> 秒后重定向</span
+            >
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+      <div class="footer-content">
+        <p data-translate="footer.copyright">
+          © 2025 Learn Chinese. 保留所有权利。
+        </p>
+        <p data-translate="footer.slogan">让世界听见中文的声音！</p>
+      </div>
+    </footer>
+
+    <!-- 脚本 -->
+    <script src="language.js"></script>
+    <script src="login.js"></script>
+  </body>
+</html>

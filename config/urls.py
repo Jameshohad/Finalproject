@@ -22,9 +22,17 @@ from drf_spectacular.views import (
     SpectacularRedocView
 )
 
+from application import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    #前端页面
+    path('', views.index, name='index'),
+    path('course/', views.course_page, name='course'),
+    path('quiz/', views.quiz_page, name='quiz'),
+    path('about/', views.about_page, name='about'),
+    path('login/', views.login, name='login'),
+    path('signup/', views.signup, name='signup'),
     # DRF API
     path('api/', include('application.api_urls')),
 

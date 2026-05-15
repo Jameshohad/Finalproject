@@ -1,0 +1,975 @@
+/* ============ 主页样式 ============ */
+.home-container {
+  padding: 20px;
+  animation: fadeIn 0.8s ease;
+}
+
+.banner {
+  background: linear-gradient(45deg, #7a2f2f, #e53935);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 18px;
+  margin-bottom: 30px;
+  font-size: 24px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+}
+
+.content {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.content img {
+  width: 350px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+.home-container .card {
+  background: linear-gradient(135deg, #e53935 0%, #ff6b6b 100%);
+  color: white;
+  padding: 20px;
+  line-height: 1.7;
+  border-radius: 16px;
+  font-size: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.feature-box {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.feature-box h4 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.feature-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.feature-box li {
+  margin: 10px 0;
+  font-size: 16px;
+  padding-left: 25px;
+  position: relative;
+}
+
+.feature-box li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4caf50;
+  font-weight: bold;
+}
+
+/* ============ 课程页面样式 ============ */
+.course {
+  padding: 20px;
+  animation: fadeIn 0.8s ease;
+}
+
+.title {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.4));
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  font-size: 26px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  justify-items: center;
+}
+
+.course-card {
+  background: #fff;
+  color: #333;
+  padding: 25px;
+  border-radius: 20px;
+  min-height: 300px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.course-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+.course-card h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.course-card ul {
+  font-size: 16px;
+  list-style: none;
+  padding: 0;
+  flex: 1;
+}
+
+.course-card li {
+  margin: 10px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.course-card li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: inherit;
+  font-size: 20px;
+}
+
+.course-card button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.course-card button:hover {
+  background: white;
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 课程卡片颜色主题 */
+.course-card.pink {
+  background: linear-gradient(135deg, #ff74a6 0%, #ff4081 100%);
+  color: white;
+}
+
+.course-card.green {
+  background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+  color: white;
+}
+
+.course-card.red {
+  background: linear-gradient(135deg, #c62828 0%, #f44336 100%);
+  color: white;
+}
+footer {
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+  padding: 30px 0;
+  margin-top: 50px;
+  width: 100%;
+}
+
+.footer-content {
+  text-align: center; /* 确保内容居中 */
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-content p {
+  margin: 8px 0;
+}
+/* ============ 测验页面样式 ============ */
+.quiz {
+  padding: 30px;
+  text-align: center;
+  animation: fadeIn 0.8s ease;
+}
+
+.quiz h2 {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.4));
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  font-size: 28px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.progress {
+  color: white;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.quiz-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.quiz-card h3 {
+  margin-bottom: 25px;
+  font-size: 22px;
+  color: #333;
+}
+
+.options {
+  display: grid;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.options button {
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #e53935 0%, #ff6b6b 100%);
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.options button:hover:not(.disabled) {
+  background: linear-gradient(135deg, #c62828 0%, #f44336 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.feedback {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 15px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.next-btn {
+  margin-top: 20px;
+  padding: 14px 30px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.next-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.score {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #2e7d32;
+  padding: 15px;
+  background: rgba(46, 125, 50, 0.1);
+  border-radius: 12px;
+}
+
+/* 按钮状态样式 */
+.options button.disabled {
+  background: #e0e0e0;
+  color: #9e9e9e;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.options button.correct {
+  background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%) !important;
+  color: white;
+}
+
+.options button.wrong {
+  background: linear-gradient(135deg, #c62828 0%, #f44336 100%) !important;
+  color: white;
+}
+
+/* ============ 关于页面样式 ============ */
+.about {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.25));
+  border-radius: 20px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.8s ease;
+}
+
+.about h2 {
+  margin-bottom: 20px;
+  font-size: 32px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.about p {
+  line-height: 1.8;
+  margin-bottom: 20px;
+  font-size: 18px;
+  text-align: justify;
+}
+
+/* ============ 注册页面样式 ============ */
+.signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 20px;
+  animation: fadeIn 0.8s ease;
+}
+
+.signup-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 450px;
+}
+
+.signup-card h2 {
+  margin-bottom: 10px;
+  font-size: 32px;
+  color: #333;
+  text-align: center;
+}
+
+.signup-card p {
+  margin-bottom: 25px;
+  color: #666;
+  text-align: center;
+  font-size: 16px;
+}
+
+.signup-card input {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  border: 2px solid #e0e0e0;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.signup-card input:focus {
+  outline: none;
+  border-color: #e53935;
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+}
+
+.signup-card button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 10px;
+  background: linear-gradient(135deg, #e53935 0%, #ff6b6b 100%);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signup-card button:hover {
+  background: linear-gradient(135deg, #c62828 0%, #f44336 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* ============ 动画效果 ============ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============ 学习进度模块样式 ============ */
+.progress-card {
+  margin-top: 20px;
+  padding: 25px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.progress-card h4 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #fff;
+  text-align: center;
+}
+
+/* 统计区域 */
+.progress-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.stat-icon {
+  font-size: 28px;
+  margin-right: 15px;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffd54f;
+}
+
+.stat-label {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-top: 5px;
+}
+
+/* 进度条区域 */
+.progress-container {
+  margin-bottom: 25px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.progress-percent {
+  font-weight: 700;
+  color: #ffd54f;
+}
+
+.progress-bar {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf50, #8bc34a);
+  border-radius: 6px;
+  width: 0%;
+  transition: width 1s ease-out;
+}
+
+/* 最近活动 */
+.recent-activity {
+  margin-bottom: 20px;
+}
+
+.recent-activity h5 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #fff;
+}
+
+.recent-activity ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recent-activity li {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.recent-activity li:before {
+  content: "•";
+  color: #4caf50;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+/* 查看个人资料按钮 */
+.view-profile-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.view-profile-btn:hover {
+  background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .progress-stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .progress-card {
+    padding: 20px;
+  }
+}
+/* ============ 响应式调整 ============ */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .content img {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-card,
+  .signup-card,
+  .about,
+  .course-card {
+    padding: 20px;
+  }
+
+  .banner,
+  .title,
+  .quiz h2 {
+    font-size: 20px;
+    padding: 15px;
+  }
+}
+/* ============ 登录状态相关样式 ============ */
+
+/* 用户欢迎信息 */
+.user-welcome {
+  background: linear-gradient(135deg, #e53935 0%, #ff6b6b 100%);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  text-align: center;
+  animation: slideDown 0.3s ease;
+}
+
+.user-welcome p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.user-welcome #user-name {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* 进度统计卡片容器 */
+.progress-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+/* 单个统计卡片 */
+.stat-card {
+  background: linear-gradient(
+    135deg,
+    rgba(229, 57, 53, 0.1) 0%,
+    rgba(255, 107, 107, 0.1) 100%
+  );
+  border: 1px solid rgba(229, 57, 53, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(229, 57, 53, 0.15);
+  border-color: rgba(229, 57, 53, 0.4);
+}
+
+.stat-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: bold;
+  color: #e53935;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 总体进度部分 */
+.overall-progress-section {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 152, 0, 0.1) 0%,
+    rgba(255, 193, 7, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 152, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.progress-percentage {
+  font-size: 24px;
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.progress-bar {
+  height: 12px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff9800 0%, #ffc107 100%);
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+/* 最近活动部分 */
+.recent-activity-section {
+  background: linear-gradient(
+    135deg,
+    rgba(76, 175, 80, 0.1) 0%,
+    rgba(56, 142, 60, 0.1) 100%
+  );
+  border: 1px solid rgba(76, 175, 80, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.recent-activity-section h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  color: #666;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  animation: slideIn 0.3s ease;
+}
+
+.activity-list li:last-child {
+  border-bottom: none;
+}
+
+/* 查看资料和登出按钮 */
+.view-profile-btn,
+.logout-btn {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-profile-btn {
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+  color: white;
+}
+
+.view-profile-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+  color: white;
+}
+
+.logout-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(244, 67, 54, 0.3);
+}
+
+/* ============ 未登录提示 ============ */
+
+.login-prompt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+}
+
+.prompt-card {
+  background: white;
+  border-radius: 16px;
+  padding: 50px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  animation: slideUp 0.5s ease;
+}
+
+.prompt-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  animation: bounce 1s ease infinite;
+}
+
+.prompt-card h3 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.prompt-card p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.prompt-buttons {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 14px 30px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #e53935 0%, #ff6b6b 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(229, 57, 53, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: #e53935;
+  border: 2px solid #e53935;
+}
+
+.btn-secondary:hover {
+  background: #fff5f5;
+}
+
+/* ============ 动画效果 ============ */
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* ============ 响应式设计 ============ */
+
+@media (max-width: 768px) {
+  .progress-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .prompt-card {
+    padding: 30px;
+  }
+
+  .prompt-buttons {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+}
+
+.next-btn,
+.reset-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.next-btn:hover,
+.reset-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}

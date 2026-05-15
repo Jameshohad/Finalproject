@@ -1,0 +1,183 @@
+/* ============ 全局重置与基本样式 ============ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
+  font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+  min-height: 100vh;
+  color: #333;
+}
+
+/* 主容器 */
+main {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+/* ============ 导航栏样式 ============ */
+.nav {
+  background: rgba(247, 183, 51, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+/* Logo样式 */
+.logo-img {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 3px solid #fff;
+}
+
+.logo-img:hover {
+  transform: scale(1.2) rotate(5deg);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 导航菜单 */
+.menu {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+/* 翻译按钮样式 */
+.menu button.translate-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 130px !important;
+  height: 75px !important;
+  padding: 0 16px !important;
+  margin: 0 !important;
+  border: none !important;
+  outline: none !important;
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%) !important;
+  color: #fff !important;
+  border-radius: 50px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  font-family: inherit !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.menu button.translate-btn:hover {
+  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%) !important;
+  transform: translateY(-5px) scale(1.05) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 翻译按钮图标 */
+.menu button.translate-btn .translate-icon {
+  font-size: 20px !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+.menu button.translate-btn .lang-text {
+  display: inline-block !important;
+  white-space: nowrap !important;
+}
+
+/* 导航按钮 */
+.menu a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 75px;
+  height: 75px;
+  background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+  color: white;
+  border-radius: 50%;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  text-align: center;
+  padding: 10px;
+}
+
+.menu a:hover {
+  background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ============ 响应式设计 ============ */
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .logo-img {
+    margin-bottom: 15px;
+  }
+
+  .menu {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .menu a {
+    width: 65px;
+    height: 65px;
+    font-size: 13px;
+  }
+
+  main {
+    padding: 15px;
+    margin: 10px auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu {
+    gap: 8px;
+  }
+
+  .menu a {
+    width: 60px;
+    height: 60px;
+    font-size: 12px;
+  }
+}
+
+/* 卡片通用样式 */
+.card {
+  background: linear-gradient(135deg, #e53935 0%, #ff6b6b 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}

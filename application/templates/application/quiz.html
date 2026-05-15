@@ -1,0 +1,69 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>测验 - Learn Chinese</title>
+    <link rel="stylesheet" href=" {% static 'application/style.css' %}" />
+    <link rel="stylesheet" href=" {% static 'application/pages.css' %}" />
+    <script src="{% static 'application/language.js' %}" defer></script>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="/">
+        <img
+          class="logo-img"
+          src="{% static 'application/images/logo.png' %}"
+          alt="Learn Chinese Logo"
+        />
+      </a>
+
+      <!-- 菜单部分 -->
+      <div class="menu">
+        <a href="{% url 'index' %}" data-translate="nav.home">主页</a>
+        <a href="{% url 'course' %}" data-translate="nav.courses">课程</a>
+        <a href="{% url 'quiz' %}" data-translate="nav.quiz">测验</a>
+        <a href="{% url 'about' %}" data-translate="nav.about">关于</a>
+        <a href="{% url 'signup' %}" data-translate="nav.signup">注册</a>
+        <!-- 添加翻译按钮 -->
+          <button type="button" id="translate-btn" class="translate-btn">
+            <span class="translate-icon">🌐</span>
+            <span class="lang-text">English</span>
+          </button>
+        </a>
+      </div>
+    </nav>
+
+    <main>
+      <div class="quiz">
+        <h2 data-translate="quiz.title">中文水平测验</h2>
+        <p class="progress" id="progress">问题 1 / 5</p>
+
+        <div class="quiz-card">
+          <h3 id="question">问题将在这里显示</h3>
+
+          <div class="options" id="options">
+            <!-- 选项将通过JavaScript动态生成 -->
+          </div>
+
+          <div class="feedback" id="feedback"></div>
+
+          <button
+            class="next-btn"
+            id="next-btn"
+            onclick="nextQuestion()"
+            style="display: none"
+          >
+            下一题 →
+          </button>
+
+          <p class="score" id="score" style="display: none"></p>
+        </div>
+      </div>
+    </main>
+
+    <script src="{% static 'application/script.js' %}" defer></script>
+    <script src="{% static 'application/quiz.js' %}" defer></script>
+  </body>
+</html>

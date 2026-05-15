@@ -8,3 +8,33 @@ db.sqlite3
 .DS_Store
 media/
 staticfiles/
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Django
+db.sqlite3
+*.log
+media/
+staticfiles/
+
+# Environment variables
+.env
+
+# IDE
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/

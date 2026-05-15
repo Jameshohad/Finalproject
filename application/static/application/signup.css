@@ -1,0 +1,368 @@
+/* ============ 注册页面专用样式 ============ */
+.signup-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.signup-header h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 32px;
+    background: linear-gradient(135deg, #E53935 0%, #FF6B6B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.signup-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #f9f9f9;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #E53935;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+}
+
+/* 密码输入框容器 */
+.password-input-wrapper {
+    position: relative;
+}
+
+/* 密码显示/隐藏按钮 */
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #666;
+    padding: 4px 8px;
+    border-radius: 4px;
+    line-height: 1;
+    z-index: 10;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle:hover {
+    background-color: #f0f0f0;
+}
+
+.password-toggle:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.password-toggle:active {
+    background-color: #e0e0e0;
+}
+
+.form-group input.error {
+    border-color: #f44336;
+    background: #fff5f5;
+}
+
+.form-group input.success {
+    border-color: #4CAF50;
+    background: #f5fff5;
+}
+
+.hint {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+
+.password-strength {
+    margin-top: 10px;
+}
+
+.strength-bar {
+    height: 4px;
+    width: 0%;
+    background: #f44336;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.strength-text {
+    font-size: 12px;
+    color: #f44336;
+    margin-top: 5px;
+    display: block;
+}
+
+.goal-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+@media (max-width: 480px) {
+    .goal-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+.goal-option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.goal-option:hover {
+    background: #eee;
+}
+
+.goal-option input {
+    margin-right: 10px;
+}
+
+.goal-option span {
+    flex: 1;
+}
+
+.goal-option input:checked + span {
+    color: #E53935;
+    font-weight: 600;
+}
+
+.terms-link {
+    color: #E53935;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #E53935 0%, #FF6B6B 100%);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #C62828 0%, #FF5252 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #E53935;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.social-login {
+    margin-top: 30px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #999;
+    font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+.divider span {
+    padding: 0 15px;
+}
+
+.social-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.social-btn {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.social-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.google-btn {
+    color: #DB4437;
+    border-color: #DB4437;
+}
+
+.wechat-btn {
+    color: #09BB07;
+    border-color: #09BB07;
+}
+
+.github-btn {
+    color: #333;
+    border-color: #333;
+}
+
+.success-message {
+    text-align: center;
+    padding: 30px;
+    animation: fadeIn 0.5s ease;
+}
+
+.success-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+    animation: bounce 1s ease infinite;
+}
+
+.success-message h3 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+.success-message p {
+    color: #666;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.start-learning-btn {
+    margin-top: 20px;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #4CAF50 0%, #2e7d32 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.start-learning-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .signup-card {
+        padding: 20px;
+    }
+    
+    .signup-header h2 {
+        font-size: 28px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+}
+ /* 页脚样式 */
+footer {
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    padding: 30px 0;
+    margin-top: 50px;
+    width: 100%;
+}
+
+.footer-content {
+    text-align: center; /* 确保内容居中 */
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer-content p {
+    margin: 8px 0;
+}
