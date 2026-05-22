@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   translateBtn.addEventListener("click", function () {
     console.log("翻译按钮被点击了");
-    alert("按钮点击成功");
   });
 });
 // 翻译对象 - 包含所有多语言翻译内容
