@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class LearningGoal(models.Model):
@@ -24,6 +25,8 @@ class User(AbstractUser):
         related_name="users"
     )
     preferred_language = models.CharField(max_length=10, default="zh-CN")
+    is_premium = models.BooleanField(default=False)
+    premium_until = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -33,6 +36,14 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    @property
+    def has_active_premium(self):
+        if self.is_staff or self.is_superuser:
+            return True
+        if not self.is_premium:
+            return False
+        return self.premium_until is None or self.premium_until >= timezone.now()
+
 
 class Course(models.Model):
     title = models.CharField(max_length=150)
@@ -41,6 +52,7 @@ class Course(models.Model):
     level_name = models.CharField(max_length=50, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     external_link = models.URLField(blank=True, null=True)
+    is_premium = models.BooleanField(default=False)
     is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

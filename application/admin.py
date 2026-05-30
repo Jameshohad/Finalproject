@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from django.core.cache import cache
 
 from .models import (
     LearningGoal,
@@ -26,12 +27,12 @@ class LearningGoalAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     fieldsets = DjangoUserAdmin.fieldsets + (
-        ("Learning profile", {"fields": ("goal", "preferred_language")}),
+        ("Learning profile", {"fields": ("goal", "preferred_language", "is_premium", "premium_until")}),
         ("Timestamps", {"fields": ("created_at", "updated_at")}),
     )
     readonly_fields = ("created_at", "updated_at")
-    list_display = ("username", "email", "goal", "is_staff", "is_active")
-    list_filter = ("is_staff", "is_active", "goal")
+    list_display = ("username", "email", "goal", "is_premium", "premium_until", "is_staff", "is_active")
+    list_filter = ("is_staff", "is_active", "is_premium", "goal")
     search_fields = ("username", "email")
 
 
@@ -43,11 +44,15 @@ class LessonInline(admin.TabularInline):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "level_name", "is_published", "created_at")
-    list_filter = ("category", "level_name", "is_published")
+    list_display = ("title", "category", "level_name", "is_premium", "is_published", "created_at")
+    list_filter = ("category", "level_name", "is_premium", "is_published")
     search_fields = ("title", "description")
     prepopulated_fields = {"slug": ("title",)}
     inlines = [LessonInline]
+
+    def save_model(self, request, obj, form, change):
+        cache.delete("published_courses")
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Lesson)
@@ -85,6 +90,10 @@ class QuizAdmin(admin.ModelAdmin):
     list_filter = ("is_active", "course")
     search_fields = ("title", "description")
     inlines = [QuizQuestionInline]
+
+    def save_model(self, request, obj, form, change):
+        cache.delete("active_quizzes")
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(QuizOption)

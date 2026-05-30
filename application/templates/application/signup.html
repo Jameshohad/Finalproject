@@ -1,45 +1,46 @@
-{% load static %}
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>注册 - Learn Chinese</title>
-  <link rel="stylesheet" href="{% static 'application/style.css' %}" />
-  <link rel="stylesheet" href="{% static 'application/signup.css' %}" />
-</head>
-<body>
-  <nav class="nav">
-    <a href="{% url 'index' %}"><img class="logo-img" src="{% static 'application/images/logo.png' %}" alt="Learn Chinese Logo" /></a>
-    <div class="menu">
-      <a href="{% url 'index' %}">主页</a>
-      <a href="{% url 'course' %}">课程</a>
-      <a href="{% url 'quiz' %}">测验</a>
-      <a href="{% url 'about' %}">关于</a>
-      <a href="{% url 'login' %}">登录</a>
-    </div>
-  </nav>
+{% extends "application/base.html" %}
 
-  <main>
-    <form method="post" class="signup-card">
-      {% csrf_token %}
-      <h2>创建账户</h2>
-      {{ form.non_field_errors }}
-      <label>用户名</label>
-      {{ form.username }}
-      <label>邮箱</label>
-      {{ form.email }}
-      <label>学习目标</label>
-      {{ form.goal }}
-      <label>偏好语言</label>
-      {{ form.preferred_language }}
-      <label>密码</label>
-      {{ form.password1 }}
-      <label>确认密码</label>
-      {{ form.password2 }}
-      <button type="submit">注册</button>
-      <p>已有账户？<a href="{% url 'login' %}">立即登录</a></p>
-    </form>
-  </main>
-</body>
-</html>
+{% block title %}Sign up - Learn Chinese{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-copy">
+    <p class="eyebrow">Start learning</p>
+    <h1>Create an account and track your Chinese progress.</h1>
+    <p>After registration, you can study free courses, take quizzes, and upgrade to Premium when you are ready for advanced lessons.</p>
+  </div>
+
+  <form method="post" class="auth-card" novalidate>
+    {% csrf_token %}
+    <h2>Create account</h2>
+    {{ form.non_field_errors }}
+
+    <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+    {{ form.username }}
+    {{ form.username.errors }}
+
+    <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+    {{ form.email }}
+    {{ form.email.errors }}
+
+    <label for="{{ form.goal.id_for_label }}">{{ form.goal.label }}</label>
+    {{ form.goal }}
+    {{ form.goal.errors }}
+
+    <label for="{{ form.preferred_language.id_for_label }}">{{ form.preferred_language.label }}</label>
+    {{ form.preferred_language }}
+    {{ form.preferred_language.errors }}
+
+    <label for="{{ form.password1.id_for_label }}">Password</label>
+    {{ form.password1 }}
+    {{ form.password1.errors }}
+
+    <label for="{{ form.password2.id_for_label }}">Confirm password</label>
+    {{ form.password2 }}
+    {{ form.password2.errors }}
+
+    <button type="submit" class="button primary full-width">Create account</button>
+    <p class="auth-switch">Already registered? <a href="{% url 'login' %}">Login</a>.</p>
+  </form>
+</section>
+{% endblock %}

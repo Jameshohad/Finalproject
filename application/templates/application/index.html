@@ -1,199 +1,88 @@
+{% extends "application/base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Learn Chinese - 轻松学中文</title>
-    <link rel="stylesheet" href=" {% static 'application/style.css' %}" />
-    <link rel="stylesheet" href=" {% static 'application/pages.css' %}" />
-    <link
-      rel="icon"
-      href="{% static 'application/images/logo.png' %}"
-      type="image/png"
-    />
-    <script src="{% static 'application/language.js' %}" defer></script>
-  </head>
-  <body>
-    <!-- 导航栏 -->
-    <nav class="nav">
-      <a href="/">
-        <img
-          class="logo-img"
-          src="{% static 'application/images/logo.png' %}"
-          alt="Learn Chinese Logo"
-        />
-      </a>
 
-      <!-- 菜单部分 -->
-      <div class="menu">
-        <a href="{% url 'index' %}" data-translate="nav.home">主页</a>
-        <a href="{% url 'course' %}" data-translate="nav.courses">课程</a>
-        <a href="{% url 'quiz' %}" data-translate="nav.quiz">测验</a>
-        <a href="{% url 'about' %}" data-translate="nav.about">关于</a>
-        <a href="{% url 'signup' %}" data-translate="nav.signup">注册</a>
-        <!-- 添加翻译按钮 -->
-        <button type="button" id="translate-btn" class="translate-btn">
-          <span class="translate-icon">🌐</span>
-          <span class="lang-text">English</span>
-        </button>
-      </div>
-    </nav>
+{% block title %}Learn Chinese - Easy Chinese Learning{% endblock %}
 
-    <!-- 主内容区 -->
-    <main>
-      <div class="home-container">
-        <!-- 横幅 -->
-        <div class="banner" data-translate="home.banner">
-          轻松学中文 — 专为所有对中文感兴趣的学习者设计。
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Easy Chinese Learning</p>
+    <h1>Practical Chinese courses for international learners.</h1>
+    <p>
+      Learn greetings, travel phrases, daily conversation, and business Chinese with a clear
+      learning path. Build useful language skills while discovering Chinese culture step by step.
+    </p>
+    <div class="hero-actions">
+      <a class="button primary" href="{% url 'course' %}">Start learning</a>
+      {% if request.user.is_authenticated %}
+        <a class="button secondary" href="{% url 'quiz' %}">Take a quiz</a>
+      {% else %}
+        <a class="button secondary" href="{% url 'signup' %}">Create account</a>
+      {% endif %}
+    </div>
+  </div>
+  <img class="hero-image" src="{% static 'application/images/hero.jpg' %}" alt="A student learning Chinese online" />
+</section>
+
+<section class="dashboard-grid">
+  <article class="panel">
+    <h2>Learning progress</h2>
+    {% if request.user.is_authenticated %}
+      <p class="muted">Welcome back, {{ request.user.username }}.</p>
+      <div class="stats-grid">
+        <div>
+          <strong>{{ completed_lessons }}</strong>
+          <span>Lessons completed</span>
         </div>
-
-        <!-- 内容区域 -->
-        <div class="content">
-          <img
-            src="{% static 'application/images/hero.jpg' %}"
-            alt="学习中文的图片"
-          />
-
-          <div class="info">
-            <div class="card" data-translate="home.card1">
-              中文是世界上使用最广泛的语言之一。
-            </div>
-            <div class="card" data-translate="home.card2">
-              学习中文可以帮助您更好地了解中国文化。
-            </div>
-            <div class="card" data-translate="home.card3">
-              本课程专为所有对中文感兴趣的学习者设计。
-            </div>
-            <!-- 学习进度追踪模块 -->
-            <!-- 学习进度追踪 - 仅在登录后显示 -->
-            <div
-              class="progress-container"
-              id="progress-container"
-              style="display: none"
-            >
-              <div class="progress-card">
-                <h2 data-translate="home.progressTitle">学习进度追踪</h2>
-
-                <!-- 用户欢迎信息 -->
-                <div class="user-welcome" id="user-welcome">
-                  <p data-translate="home.userwelcome">
-                    欢迎, <span id="user-name">用户</span>! 👋
-                  </p>
-                </div>
-
-                <!-- 进度统计卡片 -->
-                <div class="progress-stats">
-                  <div class="stat-card">
-                    <div class="stat-icon">📚</div>
-                    <div class="stat-number" id="completed-lessons">0</div>
-                    <div class="stat-label" data-translate="home.lessons">
-                      已学课程
-                    </div>
-                  </div>
-
-                  <div class="stat-card">
-                    <div class="stat-icon">🎯</div>
-                    <div class="stat-number" id="completed-quizzes">0</div>
-                    <div class="stat-label" data-translate="home.quizzes">
-                      完成测验
-                    </div>
-                  </div>
-
-                  <div class="stat-card">
-                    <div class="stat-icon">⏱️</div>
-                    <div class="stat-number" id="study-time">0</div>
-                    <div class="stat-label" data-translate="home.studyTime">
-                      学习时间(小时)
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 总体进度条 -->
-                <div class="overall-progress-section">
-                  <div class="progress-header">
-                    <span data-translate="home.overallProgress">总体进度</span>
-                    <span class="progress-percentage" id="overall-progress"
-                      >0%</span
-                    >
-                  </div>
-                  <div class="progress-bar">
-                    <div
-                      class="progress-fill"
-                      id="progress-fill"
-                      style="width: 0%"
-                    ></div>
-                  </div>
-                </div>
-
-                <!-- 最近活动 -->
-                <div class="recent-activity-section">
-                  <h3 data-translate="home.recentActivity">最近活动</h3>
-                  <ul id="activity-list" class="activity-list">
-                    <li data-translate="home.noActivity">
-                      暂无活动记录，开始学习吧！
-                    </li>
-                  </ul>
-                </div>
-
-                <!-- 查看个人资料按钮 -->
-                <button
-                  class="view-profile-btn"
-                  id="view-profile"
-                  data-translate="home.viewProfile"
-                >
-                  查看完整个人资料
-                </button>
-
-                <!-- 登出按钮 -->
-                <button
-                  class="logout-btn"
-                  id="logout-btn"
-                  data-translate="home.logout"
-                >
-                  🚪 登出
-                </button>
-              </div>
-            </div>
-
-            <!-- 未登录提示 -->
-            <div class="login-prompt" id="login-prompt">
-              <div class="prompt-card">
-                <div class="prompt-icon">🔐</div>
-                <h3 data-translate="home.loginPrompt">登录以继续学习</h3>
-                <p data-translate="home.loginPromptDesc">
-                  注册或登录您的账户，开始跟踪您的学习进度
-                </p>
-                <div class="prompt-buttons">
-                  <a
-                    href="{% url 'login' %}"
-                    class="btn-primary"
-                    data-translate="home.loginButton"
-                    >立即登录</a
-                  >
-                  <a
-                    href="{% url 'signup' %}"
-                    class="btn-secondary"
-                    data-translate="home.signupButton"
-                    >注册账户</a
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="feature-box">
-              <h4 data-translate="home.features">平台特色</h4>
-              <ul>
-                <li data-translate="home.feature1">📊 学习进度跟踪</li>
-                <li data-translate="home.feature2">🎧 AI发音练习</li>
-                <li data-translate="home.feature3">📝 每周测验挑战</li>
-              </ul>
-            </div>
-          </div>
+        <div>
+          <strong>{{ completed_quizzes }}</strong>
+          <span>Quizzes completed</span>
+        </div>
+        <div>
+          <strong>{{ study_hours }}</strong>
+          <span>Study hours</span>
         </div>
       </div>
-    </main>
+      <div class="progress-track" aria-label="Overall progress">
+        <span style="width: {{ overall_progress }}%"></span>
+      </div>
+      <p class="muted">Current progress: {{ overall_progress }}%</p>
+    {% else %}
+      <p>Create an account to save your course progress, quiz results, and recent learning activity.</p>
+      <a class="button primary" href="{% url 'signup' %}">Join for free</a>
+    {% endif %}
+  </article>
 
-    <script src="{% static 'application/script.js' %}"></script>
-  </body>
-</html>
+  <article class="panel premium-panel">
+    <h2>Premium courses</h2>
+    <p>
+      Free courses are perfect for beginners. Premium courses unlock a deeper learning path,
+      including business Chinese, advanced conversation, and more guided practice.
+    </p>
+    <div class="price-row">
+      <strong>$9</strong>
+      <span>/ month</span>
+    </div>
+    {% if has_premium %}
+      <p class="status-ok">Your account has Premium access.</p>
+    {% else %}
+      <p class="muted">{{ premium_courses_count }} premium courses are available for upgraded learners.</p>
+    {% endif %}
+  </article>
+</section>
+
+<section class="feature-grid">
+  <article>
+    <h3>Daily conversation</h3>
+    <p>Practice greetings, introductions, shopping, food ordering, transport, and hotel phrases.</p>
+  </article>
+  <article>
+    <h3>Chinese quizzes</h3>
+    <p>Check your vocabulary and sentence understanding with short learning quizzes.</p>
+  </article>
+  <article>
+    <h3>Cultural context</h3>
+    <p>Learn the language together with culture so your Chinese sounds more natural.</p>
+  </article>
+</section>
+{% endblock %}

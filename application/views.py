@@ -1,47 +1,69 @@
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.shortcuts import redirect, render
 from rest_framework import permissions, viewsets
 
 from .forms import EmailOrUsernameLoginForm, SignUpForm
 from .models import (
-    LearningGoal,
-    User,
     Course,
-    Lesson,
     CourseEnrollment,
-    UserLessonProgress,
+    LearningActivity,
+    LearningGoal,
+    Lesson,
     Quiz,
-    QuizQuestion,
-    QuizOption,
     QuizAttempt,
     QuizAttemptAnswer,
-    LearningActivity,
+    QuizOption,
+    QuizQuestion,
+    User,
+    UserLessonProgress,
 )
 from .serializers import (
-    LearningGoalSerializer,
-    UserSerializer,
-    CourseSerializer,
-    LessonSerializer,
     CourseEnrollmentSerializer,
-    UserLessonProgressSerializer,
-    QuizSerializer,
-    QuizQuestionSerializer,
-    QuizOptionSerializer,
-    QuizAttemptSerializer,
-    QuizAttemptAnswerSerializer,
+    CourseSerializer,
     LearningActivitySerializer,
+    LearningGoalSerializer,
+    LessonSerializer,
+    QuizAttemptAnswerSerializer,
+    QuizAttemptSerializer,
+    QuizOptionSerializer,
+    QuizQuestionSerializer,
+    QuizSerializer,
+    UserLessonProgressSerializer,
+    UserSerializer,
 )
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
-    """Public can read published learning content; only staff can create/update/delete."""
+    """Public users can read learning content; only staff can change it."""
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return request.user and request.user.is_staff
+        return bool(request.user and request.user.is_staff)
+
+
+def user_has_premium(user):
+    return bool(user.is_authenticated and user.has_active_premium)
+
+
+def published_courses():
+    return (
+        Course.objects.filter(is_published=True)
+        .prefetch_related("lessons")
+        .order_by("category", "title")
+    )
+
+
+def active_quizzes():
+    return (
+        Quiz.objects.filter(is_active=True)
+        .select_related("course")
+        .prefetch_related("questions__options")
+        .order_by("title")
+    )
 
 
 # ---------- Django template pages ----------
@@ -53,6 +75,8 @@ def index(request):
         "study_hours": 0,
         "overall_progress": 0,
         "activities": [],
+        "premium_courses_count": Course.objects.filter(is_premium=True, is_published=True).count(),
+        "has_premium": user_has_premium(request.user),
     }
 
     if request.user.is_authenticated:
@@ -82,22 +106,37 @@ def index(request):
 
 
 def course_page(request):
-    courses = (
-        Course.objects.filter(is_published=True)
-        .prefetch_related("lessons")
-        .order_by("category", "title")
+    cache_key = "published_courses"
+    courses = cache.get(cache_key)
+    if courses is None:
+        courses = list(published_courses())
+        cache.set(cache_key, courses, 60 * 5)
+
+    return render(
+        request,
+        "application/course.html",
+        {
+            "courses": courses,
+            "has_premium": user_has_premium(request.user),
+        },
     )
-    return render(request, "application/course.html", {"courses": courses})
 
 
 def quiz_page(request):
-    quizzes = (
-        Quiz.objects.filter(is_active=True)
-        .select_related("course")
-        .prefetch_related("questions__options")
-        .order_by("title")
+    cache_key = "active_quizzes"
+    quizzes = cache.get(cache_key)
+    if quizzes is None:
+        quizzes = list(active_quizzes())
+        cache.set(cache_key, quizzes, 60 * 5)
+
+    return render(
+        request,
+        "application/quiz.html",
+        {
+            "quizzes": quizzes,
+            "has_premium": user_has_premium(request.user),
+        },
     )
-    return render(request, "application/quiz.html", {"quizzes": quizzes})
 
 
 def about_page(request):
@@ -113,7 +152,7 @@ def signup_page(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            messages.success(request, "注册成功，欢迎开始学习中文！")
+            messages.success(request, "Registration successful. Welcome to Learn Chinese!")
             return redirect("index")
     else:
         form = SignUpForm()
@@ -129,7 +168,7 @@ def login_page(request):
         form = EmailOrUsernameLoginForm(request.POST)
         if form.is_valid():
             auth_login(request, form.cleaned_data["user"])
-            messages.success(request, "登录成功！")
+            messages.success(request, "Login successful.")
             return redirect("index")
     else:
         form = EmailOrUsernameLoginForm()
@@ -140,7 +179,7 @@ def login_page(request):
 @login_required
 def logout_page(request):
     auth_logout(request)
-    messages.success(request, "已登出。")
+    messages.success(request, "You have been logged out.")
     return redirect("index")
 
 
@@ -183,6 +222,8 @@ class CourseEnrollmentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = CourseEnrollment.objects.select_related("user", "course")
+        if not self.request.user.is_authenticated:
+            return queryset.none()
         if self.request.user.is_staff:
             return queryset.all()
         return queryset.filter(user=self.request.user)
@@ -197,6 +238,8 @@ class UserLessonProgressViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = UserLessonProgress.objects.select_related("user", "lesson", "lesson__course")
+        if not self.request.user.is_authenticated:
+            return queryset.none()
         if self.request.user.is_staff:
             return queryset.all()
         return queryset.filter(user=self.request.user)
@@ -234,6 +277,8 @@ class QuizAttemptViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = QuizAttempt.objects.select_related("user", "quiz").prefetch_related("answers")
+        if not self.request.user.is_authenticated:
+            return queryset.none()
         if self.request.user.is_staff:
             return queryset.all()
         return queryset.filter(user=self.request.user)
@@ -250,6 +295,8 @@ class QuizAttemptAnswerViewSet(viewsets.ModelViewSet):
         queryset = QuizAttemptAnswer.objects.select_related(
             "attempt", "attempt__user", "question", "selected_option"
         )
+        if not self.request.user.is_authenticated:
+            return queryset.none()
         if self.request.user.is_staff:
             return queryset.all()
         return queryset.filter(attempt__user=self.request.user)
@@ -260,7 +307,11 @@ class LearningActivityViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        queryset = LearningActivity.objects.select_related("user", "related_course", "related_lesson", "related_quiz")
+        queryset = LearningActivity.objects.select_related(
+            "user", "related_course", "related_lesson", "related_quiz"
+        )
+        if not self.request.user.is_authenticated:
+            return queryset.none()
         if self.request.user.is_staff:
             return queryset.all()
         return queryset.filter(user=self.request.user)

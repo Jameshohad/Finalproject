@@ -1,77 +1,64 @@
-{% load static %}
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>课程 - Learn Chinese</title>
-  <link rel="stylesheet" href="{% static 'application/style.css' %}" />
-  <link rel="stylesheet" href="{% static 'application/pages.css' %}" />
-  <script src="{% static 'application/language.js' %}" defer></script>
-</head>
-<body>
-  <nav class="nav">
-    <a href="{% url 'index' %}">
-      <img class="logo-img" src="{% static 'application/images/logo.png' %}" alt="Learn Chinese Logo" />
-    </a>
-    <div class="menu">
-      <a href="{% url 'index' %}" data-translate="nav.home">主页</a>
-      <a href="{% url 'course' %}" data-translate="nav.courses">课程</a>
-      <a href="{% url 'quiz' %}" data-translate="nav.quiz">测验</a>
-      <a href="{% url 'about' %}" data-translate="nav.about">关于</a>
-      {% if request.user.is_authenticated %}
-        <a href="{% url 'logout' %}">登出</a>
-      {% else %}
-        <a href="{% url 'login' %}">登录</a>
-        <a href="{% url 'signup' %}" data-translate="nav.signup">注册</a>
-      {% endif %}
-      <button type="button" id="translate-btn" class="translate-btn">
-        <span class="translate-icon"></span>
-        <span class="lang-text">English</span>
-      </button>
-    </div>
-  </nav>
+{% extends "application/base.html" %}
 
-  <main>
-    <div class="course">
-      <div class="title" data-translate="courses.title">开始您的个性化中文学习之旅</div>
-      <div class="grid">
-        {% for course in courses %}
-          <div class="course-card {% cycle 'pink' 'green' 'red' %}">
-            <h3>{{ course.title }}</h3>
-            {% if course.description %}<p>{{ course.description }}</p>{% endif %}
-            <ul>
-              {% for lesson in course.lessons.all %}
-                <li>
-                  {{ lesson.lesson_order }}. {{ lesson.title }}
-                  {% if lesson.duration_minutes %} · {{ lesson.duration_minutes }} 分钟{% endif %}
-                </li>
-              {% empty %}
-                <li>管理员还没有添加 lesson。</li>
-              {% endfor %}
-            </ul>
-            {% if course.external_link %}
-              <button type="button" data-link="{{ course.external_link }}">开始学习</button>
-            {% else %}
-              <button type="button" disabled>暂无链接</button>
-            {% endif %}
-          </div>
-        {% empty %}
-          <div class="course-card pink">
-            <h3>还没有课程</h3>
-            <p>请进入 Django Admin 添加 Course，并勾选 is_published。</p>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  </main>
+{% block title %}Courses - Learn Chinese{% endblock %}
 
-  <footer>
-    <div class="footer-content">
-      <p>© 2025 Learn Chinese. 保留所有权利。</p>
-      <p>让世界听见中文的声音！</p>
-    </div>
-  </footer>
-  <script src="{% static 'application/script.js' %}"></script>
-</body>
-</html>
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">Chinese courses</p>
+  <h1>Choose a Chinese learning path that fits your goal.</h1>
+  <p>
+    Free courses help you build a strong foundation. Premium courses offer deeper practice
+    for learners who want to use Chinese in real-life situations.
+  </p>
+</section>
+
+<section class="course-grid">
+  {% for course in courses %}
+    {% if course.is_premium and not has_premium %}
+      <article class="content-card locked-card">
+        <div class="card-topline">
+          <span>{{ course.category }}</span>
+          <strong>Premium</strong>
+        </div>
+        <h2>{{ course.title }}</h2>
+        {% if course.description %}<p>{{ course.description }}</p>{% endif %}
+        <p class="muted">Upgrade to Premium to view all lessons and start this course.</p>
+        {% if request.user.is_authenticated %}
+          <span class="button secondary disabled-button">Premium only</span>
+        {% else %}
+          <a class="button primary" href="{% url 'signup' %}">Create account</a>
+        {% endif %}
+      </article>
+    {% else %}
+      <article class="content-card">
+        <div class="card-topline">
+          <span>{{ course.category }}</span>
+          {% if course.is_premium %}<strong>Premium</strong>{% else %}<strong>Free</strong>{% endif %}
+        </div>
+        <h2>{{ course.title }}</h2>
+        {% if course.description %}<p>{{ course.description }}</p>{% endif %}
+        <ul class="lesson-list">
+          {% for lesson in course.lessons.all %}
+            <li>
+              <span>{{ lesson.lesson_order }}. {{ lesson.title }}</span>
+              {% if lesson.duration_minutes %}<small>{{ lesson.duration_minutes }} min</small>{% endif %}
+            </li>
+          {% empty %}
+            <li><span>Course content is coming soon.</span></li>
+          {% endfor %}
+        </ul>
+        {% if course.external_link %}
+          <a class="button primary" href="{{ course.external_link }}" target="_blank" rel="noreferrer">Start learning</a>
+        {% else %}
+          <span class="button secondary disabled-button">Coming soon</span>
+        {% endif %}
+      </article>
+    {% endif %}
+  {% empty %}
+    <article class="content-card">
+      <h2>Courses are coming soon</h2>
+      <p>New Chinese lessons are being prepared. Please check back later.</p>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

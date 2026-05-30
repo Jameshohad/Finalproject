@@ -1,147 +1,34 @@
-{% load static %}
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>关于我们 - Learn Chinese</title>
-    <meta
-      name="description"
-      content="了解Learn Chinese平台，我们的使命是让中文学习变得简单、实用且有趣。"
-    />
-    <meta name="keywords" content="中文学习, 关于我们, 语言教育, 在线学习" />
-    <link rel="stylesheet" href="{% static 'application/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/pages.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/about.css' %}" />
-    <link
-      rel="icon"
-      href="{% static 'application/images/logo.png' %}"
-      type="image/png"
-    />
-    <script src="{% static 'application/language.js' %}" defer></script>
-  </head>
-  <body>
-    <!-- 导航栏 -->
-    <nav class="nav">
-      <a href="/">
-        <img
-          class="logo-img"
-          src="{% static 'application/images/logo.png' %}"
-          alt="Learn Chinese Logo"
-        />
-      </a>
+{% extends "application/base.html" %}
 
-      <!-- 菜单 -->
-      <div class="menu">
-        <a href="{% url 'index' %}" data-translate="nav.home">主页</a>
-        <a href="{% url 'course' %}" data-translate="nav.courses">课程</a>
-        <a href="{% url 'quiz' %}" data-translate="nav.quiz">测验</a>
-        <a href="{% url 'about' %}" data-translate="nav.about">关于</a>
-        <a href="{% url 'signup' %}" data-translate="nav.signup">注册</a>
-        <!-- 添加翻译按钮 -->
-        <button type="button" id="translate-btn" class="translate-btn">
-          <span class="translate-icon">🌐</span>
-          <span class="lang-text">English</span>
-        </button>
-      </div>
-    </nav>
+{% block title %}About - Learn Chinese{% endblock %}
 
-    <!-- 主内容区 -->
-    <main>
-      <div class="about">
-        <h2 data-translate="about.title">关于 Learn Chinese 平台</h2>
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">About us</p>
+  <h1>Making Chinese learning simple, practical, and enjoyable.</h1>
+  <p>
+    Learn Chinese is designed for learners from around the world. Whether you are starting from zero
+    or improving Chinese for travel, study, or work, you can find a course path that fits your goal.
+  </p>
+</section>
 
-        <p data-translate="about.intro">
-          <strong>Learn Chinese</strong>
-          是一个创新的在线中文学习平台，致力于帮助全球学习者掌握基础中文交流技能。
-          我们相信语言学习应该是愉快、实用且有效的体验。
-        </p>
-
-        <p data-translate="about.teach">
-          我们的平台采用先进的教学方法，结合现代科技，为学习者提供个性化的学习路径。
-          无论您是零基础的初学者，还是希望提升商务中文能力，我们都有适合您的课程。
-        </p>
-
-        <div class="mission-section">
-          <h3 data-translate="about.mission.title">🎯 我们的使命</h3>
-          <p data-translate="about.ability">
-            让中文学习变得简单、实用且有趣。我们专注于日常生活对话和真实场景应用，
-            帮助学习者在最短时间内获得实际交流能力。
-          </p>
-        </div>
-
-        <div class="features-section">
-          <h3 data-translate="about.features.title">✨ 平台特色</h3>
-          <ul>
-            <li data-translate="about.feature1">
-              <strong>个性化学习路径</strong> - 根据您的水平和目标定制学习计划
-            </li>
-            <li data-translate="about.feature2">
-              <strong>AI发音评估</strong> - 实时反馈发音准确性
-            </li>
-            <li data-translate="about.feature3">
-              <strong>互动式练习</strong> - 游戏化学习体验
-            </li>
-            <li data-translate="about.feature4">
-              <strong>文化融入</strong> - 学习语言同时了解中国文化
-            </li>
-            <li data-translate="about.feature5">
-              <strong>进度追踪</strong> - 可视化学习成果和进步
-            </li>
-          </ul>
-        </div>
-
-        <div class="team-section">
-          <h3 data-translate="about.team.title">👥 我们的团队</h3>
-          <p data-translate="about.team1">
-            我们由经验丰富的语言教育专家、技术开发者和用户体验设计师组成。
-            团队成员来自中国、美国、欧洲等地，拥有多元文化背景和国际化的教学理念。
-          </p>
-        </div>
-
-        <div class="project-section">
-          <h3 data-translate="about.background">💻 项目背景</h3>
-          <p data-translate="about.background1">
-            这个学习网站最初是作为一个学生项目创建的，旨在结合前端网页开发技术和语言学习科技。
-            我们希望通过这个平台展示如何利用现代技术提升语言学习效率。
-          </p>
-        </div>
-
-        <div class="contact-section">
-          <h3 data-translate="about.contact.title">📧 联系我们</h3>
-          <p data-translate="about.contact">
-            如果您有任何问题或建议，欢迎通过以下方式联系我们：
-            <br />
-            📧 邮箱: contact@learnchinese.com
-            <br />
-            📱 电话: +7 911 000 0000
-            <br />
-            🏢 地址: 俄罗斯叶卡捷琳堡市和平街
-          </p>
-        </div>
-
-        <div class="cta-section">
-          <p data-translate="about.ready">准备好开始您的中文学习之旅了吗？</p>
-          <button
-            onclick="window.location.href = '{% url 'signup' %}'"
-            class="cta-button"
-            data-translate="about.ready1"
-          >
-            立即注册免费账户
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <!-- 页脚 -->
-    <footer>
-      <div class="footer-content">
-        <p>© 2025 Learn Chinese. 保留所有权利。</p>
-        <p>让世界听见中文的声音！</p>
-      </div>
-    </footer>
-
-    <script src="{% static 'application/script.js' %}"></script>
-    <script src="{% static 'application/language.js' %}" defer></script>
-  </body>
-</html>
+<section class="split-panels">
+  <article class="panel">
+    <h2>Our courses</h2>
+    <ul class="check-list">
+      <li>HSK beginner vocabulary and basic grammar.</li>
+      <li>Daily conversation for greetings, shopping, restaurants, transport, and hotels.</li>
+      <li>Travel Chinese for airports, directions, hotels, and emergency phrases.</li>
+      <li>Premium business Chinese for meetings, email, and professional communication.</li>
+    </ul>
+  </article>
+  <article class="panel">
+    <h2>How learning works</h2>
+    <p>
+      Start with free lessons, then use quizzes to check your understanding. When you are ready
+      to go further, Premium courses give you a more complete path for advanced practice.
+      Our goal is to help every learner speak Chinese with more confidence.
+    </p>
+  </article>
+</section>
+{% endblock %}

@@ -1,84 +1,52 @@
-{% load static %}
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>测验 - Learn Chinese</title>
-  <link rel="stylesheet" href="{% static 'application/style.css' %}" />
-  <link rel="stylesheet" href="{% static 'application/pages.css' %}" />
-  <script src="{% static 'application/language.js' %}" defer></script>
-</head>
-<body>
-  <nav class="nav">
-    <a href="{% url 'index' %}">
-      <img class="logo-img" src="{% static 'application/images/logo.png' %}" alt="Learn Chinese Logo" />
-    </a>
-    <div class="menu">
-      <a href="{% url 'index' %}" data-translate="nav.home">主页</a>
-      <a href="{% url 'course' %}" data-translate="nav.courses">课程</a>
-      <a href="{% url 'quiz' %}" data-translate="nav.quiz">测验</a>
-      <a href="{% url 'about' %}" data-translate="nav.about">关于</a>
-      {% if request.user.is_authenticated %}
-        <a href="{% url 'logout' %}">登出</a>
-      {% else %}
-        <a href="{% url 'login' %}">登录</a>
-        <a href="{% url 'signup' %}" data-translate="nav.signup">注册</a>
-      {% endif %}
-      <button type="button" id="translate-btn" class="translate-btn">
-        <span class="translate-icon"></span>
-        <span class="lang-text">English</span>
-      </button>
-    </div>
-  </nav>
+{% extends "application/base.html" %}
 
-  <main>
-    <section class="quiz-section">
-      <h2>中文水平测验</h2>
-      <div class="grid">
-        {% for quiz in quizzes %}
-          <article class="quiz-card">
-            <h3>{{ quiz.title }}</h3>
-            {% if quiz.course %}<p>课程：{{ quiz.course.title }}</p>{% endif %}
-            {% if quiz.description %}<p>{{ quiz.description }}</p>{% endif %}
-            <p>通过分数：{{ quiz.pass_score }} / 100</p>
-            <p>题目数量：{{ quiz.questions.count }}</p>
+{% block title %}Quiz - Learn Chinese{% endblock %}
 
-            {% for question in quiz.questions.all %}
-              <details>
-                <summary>{{ forloop.counter }}. {{ question.question_text }}</summary>
-                <ul>
-                  {% for option in question.options.all %}
-                    <li>
-                      {{ option.option_label }}. {{ option.option_text }}
-                      {% if request.user.is_staff and option.is_correct %} ✅{% endif %}
-                    </li>
-                  {% empty %}
-                    <li>管理员还没有添加选项。</li>
-                  {% endfor %}
-                </ul>
-                {% if question.explanation %}<p>{{ question.explanation }}</p>{% endif %}
-              </details>
-            {% empty %}
-              <p>管理员还没有添加题目。</p>
-            {% endfor %}
-          </article>
-        {% empty %}
-          <article class="quiz-card">
-            <h3>还没有测验</h3>
-            <p>请进入 Django Admin 添加 Quiz、Quiz Question 和 Quiz Option，并勾选 is_active。</p>
-          </article>
-        {% endfor %}
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">Chinese quizzes</p>
+  <h1>Check your Chinese knowledge with short quizzes.</h1>
+  <p>
+    After studying a lesson, use quizzes to review vocabulary, sentences, and useful expressions.
+    Each quiz helps you see what you already know and what to practice next.
+  </p>
+</section>
+
+<section class="quiz-grid">
+  {% for quiz in quizzes %}
+    <article class="content-card quiz-card">
+      <div class="card-topline">
+        <span>{% if quiz.course %}{{ quiz.course.title }}{% else %}General practice{% endif %}</span>
+        <strong>{{ quiz.pass_score }}% pass</strong>
       </div>
-    </section>
-  </main>
+      <h2>{{ quiz.title }}</h2>
+      {% if quiz.description %}<p>{{ quiz.description }}</p>{% endif %}
+      <p class="muted">{{ quiz.questions.count }} questions</p>
 
-  <footer>
-    <div class="footer-content">
-      <p>© 2025 Learn Chinese. 保留所有权利。</p>
-      <p>让世界听见中文的声音！</p>
-    </div>
-  </footer>
-  <script src="{% static 'application/script.js' %}"></script>
-</body>
-</html>
+      {% for question in quiz.questions.all %}
+        <details class="question-detail">
+          <summary>{{ forloop.counter }}. {{ question.question_text }}</summary>
+          <ul>
+            {% for option in question.options.all %}
+              <li>
+                {{ option.option_label }}. {{ option.option_text }}
+                {% if request.user.is_staff and option.is_correct %}<strong> correct answer</strong>{% endif %}
+              </li>
+            {% empty %}
+              <li>Options are coming soon.</li>
+            {% endfor %}
+          </ul>
+          {% if question.explanation %}<p>{{ question.explanation }}</p>{% endif %}
+        </details>
+      {% empty %}
+        <p>Questions are coming soon.</p>
+      {% endfor %}
+    </article>
+  {% empty %}
+    <article class="content-card">
+      <h2>Quizzes are coming soon</h2>
+      <p>New Chinese quizzes are being prepared. Please check back later.</p>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

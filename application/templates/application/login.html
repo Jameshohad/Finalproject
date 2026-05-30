@@ -1,40 +1,30 @@
-{% load static %}
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>登录 - Learn Chinese</title>
-  <link rel="stylesheet" href="{% static 'application/style.css' %}" />
-  <link rel="stylesheet" href="{% static 'application/login.css' %}" />
-</head>
-<body>
-  <nav class="nav">
-    <a href="{% url 'index' %}"><img class="logo-img" src="{% static 'application/images/logo.png' %}" alt="Learn Chinese Logo" /></a>
-    <div class="menu">
-      <a href="{% url 'index' %}">主页</a>
-      <a href="{% url 'course' %}">课程</a>
-      <a href="{% url 'quiz' %}">测验</a>
-      <a href="{% url 'about' %}">关于</a>
-      <a href="{% url 'signup' %}">注册</a>
-    </div>
-  </nav>
+{% extends "application/base.html" %}
 
-  <main>
-    <form method="post" class="login-card">
-      {% csrf_token %}
-      <h2>登录您的账户</h2>
-      {% if messages %}
-        {% for message in messages %}<p>{{ message }}</p>{% endfor %}
-      {% endif %}
-      {{ form.non_field_errors }}
-      <label>用户名或邮箱</label>
-      {{ form.username }}
-      <label>密码</label>
-      {{ form.password }}
-      <button type="submit">登录</button>
-      <p>还没有账户？<a href="{% url 'signup' %}">立即注册</a></p>
-    </form>
-  </main>
-</body>
-</html>
+{% block title %}Login - Learn Chinese{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-copy">
+    <p class="eyebrow">Welcome back</p>
+    <h1>Continue your Chinese learning journey.</h1>
+    <p>Log in to view your progress, continue your courses, and complete more Chinese quizzes.</p>
+  </div>
+
+  <form method="post" class="auth-card" novalidate>
+    {% csrf_token %}
+    <h2>Login</h2>
+    {{ form.non_field_errors }}
+
+    <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+    {{ form.username }}
+    {{ form.username.errors }}
+
+    <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+    {{ form.password }}
+    {{ form.password.errors }}
+
+    <button type="submit" class="button primary full-width">Login</button>
+    <p class="auth-switch">No account yet? <a href="{% url 'signup' %}">Create one</a>.</p>
+  </form>
+</section>
+{% endblock %}
