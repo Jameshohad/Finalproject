@@ -22,25 +22,54 @@
       <h2>{{ quiz.title }}</h2>
       {% if quiz.description %}<p>{{ quiz.description }}</p>{% endif %}
       <p class="muted">{{ quiz.questions.count }} questions</p>
+      {% if quiz.latest_attempt %}
+        <p class="quiz-result">
+          Last score: {{ quiz.latest_attempt.score }}%
+          {% if quiz.latest_attempt.score >= quiz.pass_score %}Passed{% else %}Keep practicing{% endif %}
+        </p>
+      {% endif %}
 
-      {% for question in quiz.questions.all %}
-        <details class="question-detail">
-          <summary>{{ forloop.counter }}. {{ question.question_text }}</summary>
-          <ul>
-            {% for option in question.options.all %}
-              <li>
-                {{ option.option_label }}. {{ option.option_text }}
-                {% if request.user.is_staff and option.is_correct %}<strong> correct answer</strong>{% endif %}
-              </li>
-            {% empty %}
-              <li>Options are coming soon.</li>
-            {% endfor %}
-          </ul>
-          {% if question.explanation %}<p>{{ question.explanation }}</p>{% endif %}
-        </details>
-      {% empty %}
-        <p>Questions are coming soon.</p>
-      {% endfor %}
+      {% if request.user.is_authenticated %}
+        <form class="quiz-form" method="post" action="{% url 'submit_quiz' quiz.id %}">
+          {% csrf_token %}
+          {% for question in quiz.questions.all %}
+            <fieldset class="question-detail">
+              <legend>{{ forloop.counter }}. {{ question.question_text }}</legend>
+              <div class="quiz-options">
+                {% for option in question.options.all %}
+                  <label class="quiz-option">
+                    <input
+                      type="radio"
+                      name="question_{{ question.id }}"
+                      value="{{ option.id }}"
+                    />
+                    <span>{{ option.option_label }}. {{ option.option_text }}</span>
+                    {% if request.user.is_staff and option.is_correct %}<strong> correct answer</strong>{% endif %}
+                  </label>
+                {% empty %}
+                  <p>Options are coming soon.</p>
+                {% endfor %}
+              </div>
+              {% if question.explanation and request.user.is_staff %}<p>{{ question.explanation }}</p>{% endif %}
+            </fieldset>
+          {% empty %}
+            <p>Questions are coming soon.</p>
+          {% endfor %}
+          {% if quiz.questions.count %}
+            <button class="button primary full-width" type="submit">Submit quiz</button>
+          {% endif %}
+        </form>
+      {% else %}
+        {% for question in quiz.questions.all %}
+          <details class="question-detail">
+            <summary>{{ forloop.counter }}. {{ question.question_text }}</summary>
+            <p class="muted">Sign in to choose an answer and save your score.</p>
+          </details>
+        {% empty %}
+          <p>Questions are coming soon.</p>
+        {% endfor %}
+        <a class="button primary full-width" href="{% url 'login' %}">Sign in to take quiz</a>
+      {% endif %}
     </article>
   {% empty %}
     <article class="content-card">

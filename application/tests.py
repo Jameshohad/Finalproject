@@ -8,6 +8,8 @@ from .models import (
     LearningActivity,
     Lesson,
     Quiz,
+    QuizAttempt,
+    QuizAttemptAnswer,
     QuizQuestion,
     QuizOption,
     User,
@@ -73,22 +75,28 @@ class FinalProjectFlowTests(TestCase):
             title="Premium negotiation lesson",
             duration_minutes=25,
         )
-        quiz = Quiz.objects.create(
+        self.quiz = Quiz.objects.create(
             course=self.free_course,
             title="Starter quiz",
             pass_score=60,
             is_active=True,
         )
-        question = QuizQuestion.objects.create(
-            quiz=quiz,
+        self.question = QuizQuestion.objects.create(
+            quiz=self.quiz,
             question_order=1,
             question_text="What does ni hao mean?",
         )
-        QuizOption.objects.create(
-            question=question,
+        self.correct_option = QuizOption.objects.create(
+            question=self.question,
             option_label="A",
             option_text="Hello",
             is_correct=True,
+        )
+        self.wrong_option = QuizOption.objects.create(
+            question=self.question,
+            option_label="B",
+            option_text="Goodbye",
+            is_correct=False,
         )
 
     def test_public_pages_render(self):
@@ -185,6 +193,51 @@ class FinalProjectFlowTests(TestCase):
         self.assertContains(response, "Free path complete")
         self.assertContains(response, "Admin activation needed")
         self.assertNotContains(response, "Premium negotiation lesson")
+
+    def test_anonymous_user_can_view_quiz_but_must_login_to_submit(self):
+        response = self.client.get(reverse("quiz"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sign in to take quiz")
+
+        response = self.client.post(
+            reverse("submit_quiz", args=[self.quiz.id]),
+            {f"question_{self.question.id}": self.correct_option.id},
+        )
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('submit_quiz', args=[self.quiz.id])}",
+            fetch_redirect_response=False,
+        )
+        self.assertFalse(QuizAttempt.objects.exists())
+
+    def test_logged_in_user_can_submit_quiz_and_save_attempt(self):
+        user = User.objects.create_user(
+            username="quiz-user",
+            email="quiz@example.com",
+            password="StrongPass123!",
+        )
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("submit_quiz", args=[self.quiz.id]),
+            {f"question_{self.question.id}": self.correct_option.id},
+        )
+        self.assertRedirects(response, reverse("quiz"))
+
+        attempt = QuizAttempt.objects.get(user=user, quiz=self.quiz)
+        self.assertEqual(attempt.score, 100)
+        self.assertEqual(attempt.total_questions, 1)
+        self.assertIsNotNone(attempt.submitted_at)
+        answer = QuizAttemptAnswer.objects.get(attempt=attempt, question=self.question)
+        self.assertEqual(answer.selected_option, self.correct_option)
+        self.assertTrue(answer.is_correct)
+        self.assertTrue(
+            LearningActivity.objects.filter(
+                user=user,
+                related_quiz=self.quiz,
+                activity_type="quiz_pass",
+            ).exists()
+        )
 
     def test_premium_user_sees_premium_lessons(self):
         user = User.objects.create_user(

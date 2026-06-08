@@ -227,11 +227,18 @@ def complete_lesson(request, lesson_id):
 
 
 def quiz_page(request):
-    cache_key = "active_quizzes"
-    quizzes = cache.get(cache_key)
-    if quizzes is None:
-        quizzes = list(active_quizzes())
-        cache.set(cache_key, quizzes, 60 * 5)
+    quizzes = list(active_quizzes())
+    if request.user.is_authenticated:
+        latest_attempts = {}
+        attempts = QuizAttempt.objects.filter(
+            user=request.user,
+            submitted_at__isnull=False,
+            quiz__in=quizzes,
+        ).order_by("-submitted_at")
+        for attempt in attempts:
+            latest_attempts.setdefault(attempt.quiz_id, attempt)
+        for quiz in quizzes:
+            quiz.latest_attempt = latest_attempts.get(quiz.id)
 
     return render(
         request,
@@ -241,6 +248,64 @@ def quiz_page(request):
             "has_premium": user_has_premium(request.user),
         },
     )
+
+
+@login_required
+@require_POST
+def submit_quiz(request, quiz_id):
+    quiz = get_object_or_404(
+        Quiz.objects.prefetch_related("questions__options"),
+        pk=quiz_id,
+        is_active=True,
+    )
+    questions = list(quiz.questions.all())
+    if not questions:
+        messages.error(request, "This quiz does not have questions yet.")
+        return redirect("quiz")
+
+    now = timezone.now()
+    correct_count = 0
+    attempt = QuizAttempt.objects.create(
+        user=request.user,
+        quiz=quiz,
+        total_questions=len(questions),
+        submitted_at=now,
+    )
+
+    for question in questions:
+        selected_option_id = request.POST.get(f"question_{question.id}")
+        selected_option = None
+        is_correct = False
+        if selected_option_id:
+            selected_option = question.options.filter(id=selected_option_id).first()
+            is_correct = bool(selected_option and selected_option.is_correct)
+        if is_correct:
+            correct_count += 1
+        QuizAttemptAnswer.objects.create(
+            attempt=attempt,
+            question=question,
+            selected_option=selected_option,
+            is_correct=is_correct,
+        )
+
+    score_percent = round((correct_count / len(questions)) * 100)
+    attempt.score = score_percent
+    attempt.save(update_fields=["score"])
+
+    passed = score_percent >= quiz.pass_score
+    LearningActivity.objects.create(
+        user=request.user,
+        activity_type="quiz_pass" if passed else "quiz_fail",
+        title=f"{'Passed' if passed else 'Practiced'} {quiz.title}",
+        description=f"Score: {score_percent}% ({correct_count}/{len(questions)} correct).",
+        related_course=quiz.course,
+        related_quiz=quiz,
+    )
+    messages.success(
+        request,
+        f"{quiz.title} submitted. Score: {score_percent}% ({correct_count}/{len(questions)} correct).",
+    )
+    return redirect("quiz")
 
 
 def about_page(request):
