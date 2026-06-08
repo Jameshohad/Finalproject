@@ -2,12 +2,50 @@ from django.core.cache import cache
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Course, Lesson, Quiz, QuizQuestion, QuizOption, User
+from .models import (
+    Course,
+    CourseEnrollment,
+    LearningActivity,
+    Lesson,
+    Quiz,
+    QuizQuestion,
+    QuizOption,
+    User,
+    UserLessonProgress,
+)
+
+
+class DemoSeedContentTests(TestCase):
+    def setUp(self):
+        cache.clear()
+
+    def test_seeded_demo_courses_are_the_only_published_courses(self):
+        expected_slugs = [
+            "hsk-1-starter-course",
+            "daily-conversation",
+            "travel-chinese-essentials",
+            "sentence-building-and-grammar",
+            "business-chinese",
+            "chinese-culture-and-poetry",
+        ]
+        published_slugs = list(
+            Course.objects.filter(is_published=True).order_by("display_order").values_list("slug", flat=True)
+        )
+        self.assertEqual(published_slugs, expected_slugs)
+        for slug in expected_slugs:
+            self.assertGreaterEqual(Course.objects.get(slug=slug).lessons.count(), 2)
+
+        response = self.client.get(reverse("course"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "HSK 1 Starter Course")
+        self.assertContains(response, "Chinese Culture and Poetry")
+        self.assertNotContains(response, "Premium Business Chinese")
 
 
 class FinalProjectFlowTests(TestCase):
     def setUp(self):
         cache.clear()
+        Course.objects.all().delete()
         self.free_course = Course.objects.create(
             title="Free HSK Basics",
             slug="free-hsk-basics",
@@ -15,7 +53,7 @@ class FinalProjectFlowTests(TestCase):
             description="Open beginner course",
             is_published=True,
         )
-        Lesson.objects.create(
+        self.free_lesson = Lesson.objects.create(
             course=self.free_course,
             lesson_order=1,
             title="Hello and numbers",
@@ -29,7 +67,7 @@ class FinalProjectFlowTests(TestCase):
             is_published=True,
             is_premium=True,
         )
-        Lesson.objects.create(
+        self.premium_lesson = Lesson.objects.create(
             course=self.premium_course,
             lesson_order=1,
             title="Premium negotiation lesson",
@@ -91,7 +129,61 @@ class FinalProjectFlowTests(TestCase):
         self.client.force_login(user)
         response = self.client.get(reverse("course"))
         self.assertContains(response, "Premium Business Chinese")
-        self.assertContains(response, "Upgrade to Premium")
+        self.assertContains(response, "Complete all free lessons first")
+        self.assertContains(response, "Finish free path")
+        self.assertNotContains(response, "Premium negotiation lesson")
+
+    def test_anonymous_user_can_browse_but_cannot_save_lesson_progress(self):
+        response = self.client.get(reverse("course"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Hello and numbers")
+        self.assertContains(response, "Sign in")
+
+        response = self.client.post(reverse("complete_lesson", args=[self.free_lesson.id]))
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('complete_lesson', args=[self.free_lesson.id])}",
+            fetch_redirect_response=False,
+        )
+        self.assertFalse(UserLessonProgress.objects.exists())
+
+    def test_logged_in_user_can_complete_free_lesson(self):
+        user = User.objects.create_user(
+            username="lesson-user",
+            email="lesson@example.com",
+            password="StrongPass123!",
+        )
+        self.client.force_login(user)
+
+        response = self.client.post(reverse("complete_lesson", args=[self.free_lesson.id]))
+        self.assertRedirects(response, reverse("course"))
+
+        progress = UserLessonProgress.objects.get(user=user, lesson=self.free_lesson)
+        self.assertEqual(progress.status, "completed")
+        self.assertEqual(progress.study_time_minutes, self.free_lesson.duration_minutes)
+        enrollment = CourseEnrollment.objects.get(user=user, course=self.free_course)
+        self.assertEqual(enrollment.status, "completed")
+        self.assertEqual(enrollment.progress_percent, 100)
+        self.assertTrue(
+            LearningActivity.objects.filter(
+                user=user,
+                related_lesson=self.free_lesson,
+                activity_type="lesson_view",
+            ).exists()
+        )
+
+    def test_completed_free_path_shows_subscription_prompt_but_hides_premium_lessons(self):
+        user = User.objects.create_user(
+            username="ready-user",
+            email="ready@example.com",
+            password="StrongPass123!",
+        )
+        self.client.force_login(user)
+        self.client.post(reverse("complete_lesson", args=[self.free_lesson.id]))
+
+        response = self.client.get(reverse("course"))
+        self.assertContains(response, "Free path complete")
+        self.assertContains(response, "Admin activation needed")
         self.assertNotContains(response, "Premium negotiation lesson")
 
     def test_premium_user_sees_premium_lessons(self):

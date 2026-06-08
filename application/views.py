@@ -2,7 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.views.decorators.http import require_POST
 from rest_framework import permissions, viewsets
 
 from .forms import EmailOrUsernameLoginForm, SignUpForm
@@ -53,8 +55,42 @@ def published_courses():
     return (
         Course.objects.filter(is_published=True)
         .prefetch_related("lessons")
-        .order_by("category", "title")
+        .order_by("display_order", "title")
     )
+
+
+def free_lesson_queryset():
+    return Lesson.objects.filter(course__is_published=True, course__is_premium=False)
+
+
+def free_path_progress(user):
+    total_lessons = free_lesson_queryset().count()
+    if not user.is_authenticated:
+        return {
+            "completed_lesson_ids": [],
+            "free_lessons_total": total_lessons,
+            "free_lessons_completed": 0,
+            "free_progress_percent": 0,
+            "has_completed_free_path": False,
+        }
+
+    completed_lesson_ids = list(
+        UserLessonProgress.objects.filter(
+            user=user,
+            status="completed",
+            lesson__course__is_published=True,
+            lesson__course__is_premium=False,
+        ).values_list("lesson_id", flat=True)
+    )
+    completed_count = len(completed_lesson_ids)
+    progress_percent = round((completed_count / total_lessons) * 100) if total_lessons else 0
+    return {
+        "completed_lesson_ids": completed_lesson_ids,
+        "free_lessons_total": total_lessons,
+        "free_lessons_completed": completed_count,
+        "free_progress_percent": min(100, progress_percent),
+        "has_completed_free_path": total_lessons > 0 and completed_count >= total_lessons,
+    }
 
 
 def active_quizzes():
@@ -118,8 +154,76 @@ def course_page(request):
         {
             "courses": courses,
             "has_premium": user_has_premium(request.user),
+            **free_path_progress(request.user),
         },
     )
+
+
+@login_required
+@require_POST
+def complete_lesson(request, lesson_id):
+    lesson = get_object_or_404(
+        Lesson.objects.select_related("course"),
+        pk=lesson_id,
+        course__is_published=True,
+    )
+
+    if lesson.course.is_premium and not user_has_premium(request.user):
+        messages.error(request, "This lesson is part of Premium. Complete the free path first, then ask an admin to activate Premium.")
+        return redirect("course")
+
+    now = timezone.now()
+    progress, created = UserLessonProgress.objects.get_or_create(
+        user=request.user,
+        lesson=lesson,
+        defaults={
+            "status": "completed",
+            "completed_at": now,
+            "last_accessed_at": now,
+            "study_time_minutes": lesson.duration_minutes,
+        },
+    )
+    was_completed = progress.status == "completed"
+    if not was_completed:
+        progress.status = "completed"
+        progress.completed_at = now
+        progress.study_time_minutes = max(progress.study_time_minutes, lesson.duration_minutes)
+    progress.last_accessed_at = now
+    progress.save()
+
+    course_lesson_ids = lesson.course.lessons.values_list("id", flat=True)
+    course_lesson_count = lesson.course.lessons.count()
+    completed_in_course = UserLessonProgress.objects.filter(
+        user=request.user,
+        lesson_id__in=course_lesson_ids,
+        status="completed",
+    ).count()
+    course_progress = round((completed_in_course / course_lesson_count) * 100, 2) if course_lesson_count else 0
+    enrollment, _ = CourseEnrollment.objects.get_or_create(
+        user=request.user,
+        course=lesson.course,
+        defaults={"status": "in_progress"},
+    )
+    enrollment.progress_percent = course_progress
+    if course_lesson_count and completed_in_course >= course_lesson_count:
+        enrollment.status = "completed"
+        enrollment.completed_at = enrollment.completed_at or now
+    enrollment.save()
+
+    if created or not was_completed:
+        LearningActivity.objects.create(
+            user=request.user,
+            activity_type="lesson_view",
+            title=f"Completed {lesson.title}",
+            description=f"Finished a lesson in {lesson.course.title}.",
+            related_course=lesson.course,
+            related_lesson=lesson,
+        )
+        messages.success(request, f"Lesson completed: {lesson.title}")
+    else:
+        messages.info(request, f"You already completed: {lesson.title}")
+
+    return redirect("course")
 
 
 def quiz_page(request):
@@ -204,7 +308,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
-        queryset = Course.objects.prefetch_related("lessons")
+        queryset = Course.objects.prefetch_related("lessons").order_by("display_order", "title")
         if self.request.user.is_staff:
             return queryset.all()
         return queryset.filter(is_published=True)

@@ -44,10 +44,11 @@ class LessonInline(admin.TabularInline):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "level_name", "is_premium", "is_published", "created_at")
+    list_display = ("display_order", "title", "category", "level_name", "is_premium", "is_published", "created_at")
     list_filter = ("category", "level_name", "is_premium", "is_published")
     search_fields = ("title", "description")
     prepopulated_fields = {"slug": ("title",)}
+    ordering = ("display_order", "title")
     inlines = [LessonInline]
 
     def save_model(self, request, obj, form, change):

@@ -52,12 +52,14 @@ class Course(models.Model):
     level_name = models.CharField(max_length=50, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     external_link = models.URLField(blank=True, null=True)
+    display_order = models.IntegerField(default=0)
     is_premium = models.BooleanField(default=False)
     is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "courses"
+        ordering = ["display_order", "title"]
 
     def __str__(self):
         return self.title

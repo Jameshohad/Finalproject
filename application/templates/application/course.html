@@ -5,11 +5,37 @@
 {% block content %}
 <section class="page-heading">
   <p class="eyebrow">Chinese courses</p>
-  <h1>Choose a Chinese learning path that fits your goal.</h1>
+  <h1>Follow the free path first, then unlock advanced Chinese.</h1>
   <p>
-    Free courses help you build a strong foundation. Premium courses offer deeper practice
-    for learners who want to use Chinese in real-life situations.
+    Start with beginner words, daily sentences, and travel situations. When you finish the
+    free path, Premium becomes the next step for grammar, business, culture, and longer speech.
   </p>
+</section>
+
+<section class="learning-progress-panel">
+  {% if request.user.is_authenticated %}
+    <div>
+      <p class="eyebrow dark-eyebrow">Free path progress</p>
+      <h2>{{ free_lessons_completed }} of {{ free_lessons_total }} free lessons completed</h2>
+      {% if has_premium %}
+        <p class="muted">Premium is active. You can study every course in the full Chinese path.</p>
+      {% elif has_completed_free_path %}
+        <p class="muted">Free path complete. Ask an admin to activate Premium for this demo account.</p>
+      {% else %}
+        <p class="muted">Complete every free lesson to reach the subscription step.</p>
+      {% endif %}
+    </div>
+    <div class="progress-track" aria-label="Free course progress">
+      <span style="width: {{ free_progress_percent }}%;"></span>
+    </div>
+  {% else %}
+    <div>
+      <p class="eyebrow dark-eyebrow">Free learning path</p>
+      <h2>Create a free account to save lesson progress.</h2>
+      <p class="muted">You can browse the courses now. Sign up when you are ready to start tracking your learning habit.</p>
+    </div>
+    <a class="button primary" href="{% url 'signup' %}">Create account</a>
+  {% endif %}
 </section>
 
 <section class="course-grid">
@@ -22,9 +48,19 @@
         </div>
         <h2>{{ course.title }}</h2>
         {% if course.description %}<p>{{ course.description }}</p>{% endif %}
-        <p class="muted">Upgrade to Premium to view all lessons and start this course.</p>
+        {% if request.user.is_authenticated and has_completed_free_path %}
+          <p class="muted">Your free path is complete. This is the subscription step: an admin can activate Premium to unlock these lessons.</p>
+        {% elif request.user.is_authenticated %}
+          <p class="muted">Complete all free lessons first. Premium courses unlock after the free learning path.</p>
+        {% else %}
+          <p class="muted">Create a free account, finish the free path, then continue with Premium.</p>
+        {% endif %}
         {% if request.user.is_authenticated %}
-          <span class="button secondary disabled-button">Premium only</span>
+          {% if has_completed_free_path %}
+            <span class="button secondary disabled-button">Admin activation needed</span>
+          {% else %}
+            <span class="button secondary disabled-button">Finish free path</span>
+          {% endif %}
         {% else %}
           <a class="button primary" href="{% url 'signup' %}">Create account</a>
         {% endif %}
@@ -40,8 +76,24 @@
         <ul class="lesson-list">
           {% for lesson in course.lessons.all %}
             <li>
-              <span>{{ lesson.lesson_order }}. {{ lesson.title }}</span>
-              {% if lesson.duration_minutes %}<small>{{ lesson.duration_minutes }} min</small>{% endif %}
+              <span class="lesson-title">{{ lesson.lesson_order }}. {{ lesson.title }}</span>
+              <span class="lesson-actions">
+                {% if lesson.duration_minutes %}<small>{{ lesson.duration_minutes }} min</small>{% endif %}
+                {% if not course.is_premium %}
+                  {% if request.user.is_authenticated %}
+                    {% if lesson.id in completed_lesson_ids %}
+                      <span class="lesson-status">Completed</span>
+                    {% else %}
+                      <form method="post" action="{% url 'complete_lesson' lesson.id %}">
+                        {% csrf_token %}
+                        <button class="lesson-complete-button" type="submit">Complete</button>
+                      </form>
+                    {% endif %}
+                  {% else %}
+                    <a class="lesson-login-link" href="{% url 'login' %}">Sign in</a>
+                  {% endif %}
+                {% endif %}
+              </span>
             </li>
           {% empty %}
             <li><span>Course content is coming soon.</span></li>

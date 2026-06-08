@@ -1,72 +1,80 @@
-{% extends "application/base.html" %}
-{% load static %}
-
-{% block title %}Learn Chinese - Easy Chinese Learning{% endblock %}
-
-{% block content %}
+{% extends "application/base.html" %} {% load static %} {% block title %}Learn
+Chinese - Easy Chinese Learning{% endblock %} {% block content %}
 <section class="hero">
   <div class="hero-copy">
     <p class="eyebrow">Easy Chinese Learning</p>
-    <h1>Practical Chinese courses for international learners.</h1>
+    <h1>Practical Chinese courses for international learners</h1>
     <p>
-      Learn greetings, travel phrases, daily conversation, and business Chinese with a clear
-      learning path. Build useful language skills while discovering Chinese culture step by step.
+      Learn greetings, travel phrases, daily conversation, and business Chinese
+      with a clear learning path. Build useful language skills while discovering
+      Chinese culture step by step.
     </p>
     <div class="hero-actions">
       <a class="button primary" href="{% url 'course' %}">Start learning</a>
       {% if request.user.is_authenticated %}
-        <a class="button secondary" href="{% url 'quiz' %}">Take a quiz</a>
+      <a class="button secondary" href="{% url 'quiz' %}">Take a quiz</a>
       {% else %}
-        <a class="button secondary" href="{% url 'signup' %}">Create account</a>
+      <a class="button secondary" href="{% url 'signup' %}">Create account</a>
       {% endif %}
     </div>
   </div>
-  <img class="hero-image" src="{% static 'application/images/hero.jpg' %}" alt="A student learning Chinese online" />
+  <img
+    class="hero-image"
+    src="{% static 'application/images/hero.jpg' %}"
+    alt="A student learning Chinese online"
+  />
 </section>
 
 <section class="dashboard-grid">
   <article class="panel">
     <h2>Learning progress</h2>
     {% if request.user.is_authenticated %}
-      <p class="muted">Welcome back, {{ request.user.username }}.</p>
-      <div class="stats-grid">
-        <div>
-          <strong>{{ completed_lessons }}</strong>
-          <span>Lessons completed</span>
-        </div>
-        <div>
-          <strong>{{ completed_quizzes }}</strong>
-          <span>Quizzes completed</span>
-        </div>
-        <div>
-          <strong>{{ study_hours }}</strong>
-          <span>Study hours</span>
-        </div>
+    <p class="muted">Welcome back, {{ request.user.username }}.</p>
+    <div class="stats-grid">
+      <div>
+        <strong>{{ completed_lessons }}</strong>
+        <span>Lessons completed</span>
       </div>
-      <div class="progress-track" aria-label="Overall progress">
-        <span style="width: {{ overall_progress }}%"></span>
+      <div>
+        <strong>{{ completed_quizzes }}</strong>
+        <span>Quizzes completed</span>
       </div>
-      <p class="muted">Current progress: {{ overall_progress }}%</p>
+      <div>
+        <strong>{{ study_hours }}</strong>
+        <span>Study hours</span>
+      </div>
+    </div>
+    <div class="progress-track" aria-label="Overall progress">
+      <span style="width: {{ overall_progress }}%"></span>
+    </div>
+    <p class="muted">Current progress: {{ overall_progress }}%</p>
     {% else %}
-      <p>Create an account to save your course progress, quiz results, and recent learning activity.</p>
-      <a class="button primary" href="{% url 'signup' %}">Join for free</a>
+    <p>
+      Create an account to save your course progress, quiz results, and recent
+      learning activity.
+    </p>
+    <a class="button primary" href="{% url 'signup' %}">Join for free</a>
     {% endif %}
   </article>
 
   <article class="panel premium-panel">
     <h2>Premium courses</h2>
     <p>
-      Free courses are perfect for beginners. Premium courses unlock a deeper learning path,
-      including business Chinese, advanced conversation, and more guided practice.
+      Free courses are perfect for beginners. Premium courses unlock a deeper
+      learning path, including business Chinese, advanced conversation, and more
+      guided practice.
     </p>
     <div class="price-row">
       <strong>$9</strong>
       <span>/ month</span>
     </div>
     {% if has_premium %}
-      <p class="status-ok">Your account has Premium access.</p>
+    <p class="status-ok">Your account has Premium access.</p>
     {% else %}
-      <p class="muted">{{ premium_courses_count }} premium courses are available for upgraded learners.</p>
+    <p class="muted">
+      {{ premium_courses_count }} premium courses are available for upgraded
+      learners.
+    </p>
     {% endif %}
   </article>
 </section>
@@ -74,15 +82,24 @@
 <section class="feature-grid">
   <article>
     <h3>Daily conversation</h3>
-    <p>Practice greetings, introductions, shopping, food ordering, transport, and hotel phrases.</p>
+    <p>
+      Practice greetings, introductions, shopping, food ordering, transport, and
+      hotel phrases.
+    </p>
   </article>
   <article>
     <h3>Chinese quizzes</h3>
-    <p>Check your vocabulary and sentence understanding with short learning quizzes.</p>
+    <p>
+      Check your vocabulary and sentence understanding with short learning
+      quizzes.
+    </p>
   </article>
   <article>
     <h3>Cultural context</h3>
-    <p>Learn the language together with culture so your Chinese sounds more natural.</p>
+    <p>
+      Learn the language together with culture so your Chinese sounds more
+      natural.
+    </p>
   </article>
 </section>
 {% endblock %}
