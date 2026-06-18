@@ -2,7 +2,7 @@
 
 Learn Chinese is a full-stack web application for practical Chinese learning. It uses Django Templates for the frontend, Django REST Framework for APIs, Django Admin for content management, PostgreSQL for production data, Redis for caching/sessions, and Nginx as the frontend reverse proxy.
 
-The business model is a simulated premium subscription: free users can access open courses, while premium users unlock advanced course content. Premium status is managed in Django Admin so the final presentation demo is stable and does not depend on a real payment provider.
+The business model is a simulated premium subscription: free users can access open courses, while premium users unlock advanced course content. Premium status is managed in Django Admin.
 
 ## Features
 
@@ -79,7 +79,7 @@ The test suite covers public page rendering, registration, login, logout, API ac
 
 ## Caching and Logging
 
-Course and quiz catalog queries are cached for five minutes. In Docker, the cache and user sessions use Redis through `REDIS_URL=redis://redis:6379/1`. Locally, if Redis is not configured, Django uses an in-memory cache so development remains simple.
+In Docker, the cache and user sessions use Redis through `REDIS_URL=redis://redis:6379/1`. Locally, if Redis is not configured, Django uses an in-memory cache so development remains simple.
 
 Logs are written to stdout with timestamps, logger name, level, and message. The log level is controlled by `LOG_LEVEL`.
 
